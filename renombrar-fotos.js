@@ -5,7 +5,6 @@ const origen = "./public/fotos-originales";
 const destino = "./public/productos";
 
 const productos = [
-  "AGUA FUENTELAJARA 1.5L",
   "AGUA LANJARON 1.5L PACK 6",
   "AGUA FUENTELAJARA 0.5L",
   "AGUA LANJARON 0.5L",
