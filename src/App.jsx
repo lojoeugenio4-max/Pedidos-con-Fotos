@@ -1141,13 +1141,6 @@ const hiddenProductsRaw = [
   "ZUMO D SIMON PIÑA 200 P6 (3574)",
   "ZUMO JUVER PIÑA 850ML",
 ];
-import React, { useEffect, useMemo, useState } from "react";
-import { ShoppingCart, Trash2, Send, Search } from "lucide-react";
-
-const WHATSAPP_NUMBER = "34670716744";
-
-/* 🔴 MANTÉN AQUÍ TUS ARRAYS departments Y hiddenProductsRaw 🔴 */
-
 const slugifyImageName = (text) =>
   text
     .toLowerCase()
