@@ -1147,7 +1147,6 @@ const hiddenProductsRaw = [
 /* =========================
    📸 IMÁGENES AUTOMÁTICAS (FIX ORDEN)
 ========================= */
-
 const imageModules = import.meta.glob("./assets/productos/*.{jpg,jpeg,png,webp}", {
   eager: true,
   query: "?url",
@@ -1156,129 +1155,262 @@ const imageModules = import.meta.glob("./assets/productos/*.{jpg,jpeg,png,webp}"
 
 const productImages = Object.entries(imageModules)
   .sort(([a], [b]) => {
-    const numA = Number(a.match(/(\d+)/)?.[1] || 0);
-    const numB = Number(b.match(/(\d+)/)?.[1] || 0);
+    const fileA = a.split("/").pop();
+    const fileB = b.split("/").pop();
+
+    const numA = Number(fileA.match(/\d+/)?.[0] || 0);
+    const numB = Number(fileB.match(/\d+/)?.[0] || 0);
+
     return numA - numB;
   })
   .map(([, src]) => src);
 
-
-/* =========================
-   🔧 FUNCIONES
-========================= */
+const normalizeForCompare = (text) =>
+  text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9ñ]+/gi, "")
+    .trim();
 
 const normalizeText = (text) =>
-  text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 
-const productMatchesSearch = (product, search) =>
-  normalizeText(product).includes(normalizeText(search));
+const productMatchesSearch = (product, searchText) => {
+  const normalizedProduct = normalizeText(product);
+  const searchWords = normalizeText(searchText)
+    .split(/[^a-z0-9ñ]+/i)
+    .filter(Boolean);
 
+  return searchWords.every((searchWord) =>
+    normalizedProduct.includes(searchWord)
+  );
+};
 
-/* =========================
-   🧠 PRODUCTOS
-========================= */
-
-const visibleProducts = departments.flatMap((d) =>
-  d.products.map((name) => ({
-    id: `${d.name}-${name}`,
+const visibleProducts = departments.flatMap((department) =>
+  department.products.map((name) => ({
+    id: `${department.name}-${name}`,
     name,
+    department: department.name,
+    hidden: false,
   }))
 );
 
-const products = visibleProducts;
+const visibleProductNamesForCompare = new Set(
+  visibleProducts.map((product) => normalizeForCompare(product.name))
+);
 
+const hiddenProductsUnique = [...new Set(hiddenProductsRaw)]
+  .filter((name) => !visibleProductNamesForCompare.has(normalizeForCompare(name)))
+  .sort((a, b) => a.localeCompare(b, "es"));
 
-/* =========================
-   🚀 APP
-========================= */
+const hiddenProductsFormatted = hiddenProductsUnique.map((name) => ({
+  id: `ARTÍCULOS BUSCADOS-${name}`,
+  name,
+  department: "ARTÍCULOS BUSCADOS",
+  hidden: true,
+}));
+
+const products = [...visibleProducts, ...hiddenProductsFormatted];
 
 export default function App() {
+  useEffect(() => {
+    let viewport = document.querySelector("meta[name=viewport]");
+
+    if (!viewport) {
+      viewport = document.createElement("meta");
+      viewport.setAttribute("name", "viewport");
+      document.head.appendChild(viewport);
+    }
+
+    viewport.setAttribute(
+      "content",
+      "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    );
+  }, []);
+
   const [quantities, setQuantities] = useState({});
+  const [customerName, setCustomerName] = useState("");
+  const [notes, setNotes] = useState("");
   const [search, setSearch] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
 
   const filteredDepartments = useMemo(() => {
-    return departments.map((d) => ({
-      ...d,
-      products: d.products.filter((p) =>
-        productMatchesSearch(p, search)
-      ),
-    }));
+    const cleanSearch = search.trim();
+
+    const visibleDepartments = departments
+      .map((department) => ({
+        ...department,
+        products: cleanSearch
+          ? department.products.filter((product) =>
+              productMatchesSearch(product, cleanSearch)
+            )
+          : department.products,
+      }))
+      .filter((department) => department.products.length > 0);
+
+    if (!cleanSearch) return visibleDepartments;
+
+    const hiddenMatches = hiddenProductsUnique.filter((product) =>
+      productMatchesSearch(product, cleanSearch)
+    );
+
+    if (hiddenMatches.length > 0) {
+      visibleDepartments.push({
+        name: "ARTÍCULOS BUSCADOS",
+        products: hiddenMatches,
+      });
+    }
+
+    return visibleDepartments;
   }, [search]);
 
-  const updateQuantity = (id, field, value) => {
-    const clean = value.replace(/[^0-9]/g, "");
-    setQuantities((q) => ({
-      ...q,
-      [id]: { ...q[id], [field]: clean },
+  const selectedItems = useMemo(() => {
+    return products
+      .map((product) => ({
+        ...product,
+        cajas: Number(quantities[product.id]?.cajas || 0),
+        unidades: Number(quantities[product.id]?.unidades || 0),
+      }))
+      .filter((product) => product.cajas > 0 || product.unidades > 0);
+  }, [quantities]);
+
+  const updateQuantity = (productId, field, value) => {
+    const cleanValue = value.replace(/[^0-9]/g, "");
+    setQuantities((current) => ({
+      ...current,
+      [productId]: {
+        ...current[productId],
+        [field]: cleanValue,
+      },
     }));
   };
 
-  const sendOrder = () => {
-    const items = Object.entries(quantities)
-      .filter(([_, v]) => v?.cajas || v?.unidades)
-      .map(
-        ([id, v]) =>
-          `${id.split("-")[1]} - ${v.cajas || 0} cajas / ${
-            v.unidades || 0
-          } unidades`
-      )
-      .join("\n");
+  const closeKeyboardOnEnter = (event) => {
+    if (event.key === "Enter") {
+      event.currentTarget.blur();
+    }
+  };
 
-    if (!items) return alert("Añade cantidades");
+  const clearOrder = () => {
+    setQuantities({});
+    setCustomerName("");
+    setNotes("");
+    setSearch("");
+  };
+
+  const createWhatsAppMessage = () => {
+    const lines = ["Nuevo pedido", ""];
+
+    if (customerName.trim()) {
+      lines.push(`Cliente: ${customerName.trim()}`, "");
+    }
+
+    selectedItems.forEach((item) => {
+      const parts = [];
+      if (item.cajas > 0) parts.push(`*${item.cajas} cajas*`);
+      if (item.unidades > 0) parts.push(`*${item.unidades} unidades*`);
+
+      lines.push(`- ${item.name}: ${parts.join(" / ")}`);
+      lines.push("");
+    });
+
+    if (notes.trim()) {
+      lines.push(`Observaciones: ${notes.trim()}`, "");
+    }
+
+    lines.push("Enviado desde el formulario de pedidos");
+    return encodeURIComponent(lines.join("\n"));
+  };
+
+  const sendOrder = () => {
+    if (selectedItems.length === 0) {
+      alert("Introduce al menos una cantidad antes de enviar el pedido.");
+      return;
+    }
 
     window.open(
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(items)}`
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${createWhatsAppMessage()}`,
+      "_blank"
     );
+
+    clearOrder();
   };
 
   return (
     <div style={styles.page}>
       <div style={styles.container}>
+        <header style={styles.header}>
+          <div style={styles.iconBox}>
+            <ShoppingCart size={28} />
+          </div>
+          <div>
+            <h1 style={styles.title}>Pedido online Cash Lojo</h1>
+            <p style={styles.subtitle}>
+              Escribe cantidades en Unidades o Cajas y envía el pedido por WhatsApp.
+            </p>
+          </div>
+        </header>
 
-        {/* HEADER */}
-        <div style={styles.header}>
-          <ShoppingCart size={24} />
-          <h2>Pedido Cash Lojo</h2>
-        </div>
-
-        {/* BUSCADOR + WHATSAPP */}
-        <div style={styles.topBar}>
+        <div style={styles.cardSticky}>
+          <label style={styles.label}>Nombre o referencia del cliente</label>
           <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar..."
+            value={customerName}
+            onChange={(event) => setCustomerName(event.target.value)}
+            placeholder="Opcional"
             style={styles.input}
           />
-          <button style={styles.whatsapp} onClick={sendOrder}>
-            <Send size={16} /> WhatsApp
-          </button>
+
+          <label style={styles.label}>Buscar artículo</label>
+          <div style={styles.searchAndSendRow}>
+            <div style={styles.searchBoxCompact}>
+              <Search size={20} style={styles.searchIcon} />
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Buscar..."
+                style={styles.searchInput}
+              />
+            </div>
+
+            <button onClick={sendOrder} style={styles.stickyWhatsappButton}>
+              <Send size={18} /> WhatsApp
+            </button>
+          </div>
         </div>
 
-        {/* LISTA */}
-        {filteredDepartments.map((dep) => (
-          <div key={dep.name}>
-            <div style={styles.section}>{dep.name}</div>
+        {filteredDepartments.map((department) => (
+          <section key={department.name} style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <h2 style={styles.sectionTitle}>{department.name}</h2>
+            </div>
 
-            {dep.products.map((name) => {
-              const id = `${dep.name}-${name}`;
-              const index = products.findIndex(
-                (p) => p.name === name
+            {department.products.map((productName) => {
+              const productId = `${department.name}-${productName}`;
+              const productIndex = products.findIndex(
+                (product) => product.name === productName
               );
-              const img = productImages[index];
+              const imageSrc = productImages[productIndex];
 
               return (
-                <div key={id} style={styles.row}>
-
-                  {/* IZQUIERDA */}
-                  <div style={styles.left}>
-
+                <div key={productId} style={styles.row}>
+                  <div style={styles.leftColumn}>
                     <div style={styles.imageBox}>
-                      {img ? (
+                      {imageSrc ? (
                         <img
-                          src={img}
-                          style={styles.image}
-                          onClick={() => setSelectedImage(img)}
+                          src={imageSrc}
+                          alt={productName}
+                          style={styles.productImage}
+                          onClick={() =>
+                            setSelectedImage({
+                              src: imageSrc,
+                              name: productName,
+                            })
+                          }
                         />
                       ) : (
                         "Sin foto"
@@ -1286,132 +1418,357 @@ export default function App() {
                     </div>
 
                     <div style={styles.qtyRow}>
-                      <input
-                        placeholder="Cajas"
-                        value={quantities[id]?.cajas || ""}
-                        onChange={(e) =>
-                          updateQuantity(id, "cajas", e.target.value)
-                        }
-                        style={styles.qty}
-                      />
-                      <input
-                        placeholder="Unid"
-                        value={quantities[id]?.unidades || ""}
-                        onChange={(e) =>
-                          updateQuantity(id, "unidades", e.target.value)
-                        }
-                        style={styles.qty}
-                      />
-                    </div>
+                      <div>
+                        <label style={styles.qtyLabel}>Cajas</label>
+                        <input
+                          inputMode="numeric"
+                          enterKeyHint="done"
+                          value={quantities[productId]?.cajas || ""}
+                          onChange={(event) =>
+                            updateQuantity(productId, "cajas", event.target.value)
+                          }
+                          onKeyDown={closeKeyboardOnEnter}
+                          placeholder="0"
+                          style={styles.qtyInput}
+                        />
+                      </div>
 
+                      <div>
+                        <label style={styles.qtyLabel}>Unid.</label>
+                        <input
+                          inputMode="numeric"
+                          enterKeyHint="done"
+                          value={quantities[productId]?.unidades || ""}
+                          onChange={(event) =>
+                            updateQuantity(productId, "unidades", event.target.value)
+                          }
+                          onKeyDown={closeKeyboardOnEnter}
+                          placeholder="0"
+                          style={styles.qtyInput}
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  {/* NOMBRE */}
-                  <div style={styles.name}>{name}</div>
-
+                  <p style={styles.productName}>{productName}</p>
                 </div>
               );
             })}
-          </div>
+          </section>
         ))}
 
+        <div style={styles.card}>
+          <label style={styles.label}>Observaciones</label>
+          <textarea
+            value={notes}
+            onChange={(event) => setNotes(event.target.value)}
+            placeholder="Opcional"
+            rows={3}
+            style={styles.textarea}
+          />
+
+          <div style={styles.summary}>
+            <strong>Resumen:</strong> {selectedItems.length} artículos con cantidad.
+          </div>
+
+          <button onClick={sendOrder} style={styles.primaryButton}>
+            <Send size={20} /> Enviar por WhatsApp
+          </button>
+
+          <button onClick={clearOrder} style={styles.secondaryButton}>
+            <Trash2 size={20} /> Borrar pedido
+          </button>
+        </div>
       </div>
 
-      {/* MODAL */}
       {selectedImage && (
         <div style={styles.modal} onClick={() => setSelectedImage(null)}>
-          <img src={selectedImage} style={styles.modalImg} />
+          <div style={styles.modalContent}>
+            <img
+              src={selectedImage.src}
+              alt={selectedImage.name}
+              style={styles.modalImage}
+              onClick={(event) => event.stopPropagation()}
+            />
+            <p style={styles.modalTitle}>{selectedImage.name}</p>
+            <button
+              onClick={() => setSelectedImage(null)}
+              style={styles.closeButton}
+            >
+              Cerrar
+            </button>
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-
-/* =========================
-   🎨 ESTILOS RESPONSIVE
-========================= */
-
 const styles = {
-  page: { padding: 10, fontFamily: "Arial" },
-  container: { maxWidth: 1000, margin: "auto" },
-
-  header: { display: "flex", gap: 10, alignItems: "center" },
-
-  topBar: {
-    display: "grid",
-    gridTemplateColumns: "1fr 120px",
-    gap: 8,
-    marginBottom: 10,
+  page: {
+    minHeight: "100vh",
+    background: "#f1f5f9",
+    padding: "10px",
+    color: "#0f172a",
+    fontFamily: "Arial, sans-serif",
+    boxSizing: "border-box",
   },
-
-  input: { padding: 10 },
-
-  whatsapp: {
-    background: "#22c55e",
+  container: {
+    maxWidth: "1100px",
+    margin: "0 auto",
+  },
+  header: {
+    background: "white",
+    padding: "16px",
+    borderRadius: "18px",
+    display: "flex",
+    gap: "14px",
+    alignItems: "center",
+    marginBottom: "16px",
+    boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
+  },
+  iconBox: {
+    background: "#0f172a",
     color: "white",
-    border: "none",
-    borderRadius: 8,
+    borderRadius: "16px",
+    padding: "12px",
+    display: "flex",
   },
-
+  title: { margin: 0, fontSize: "22px" },
+  subtitle: { margin: "6px 0 0", color: "#475569", fontSize: "14px" },
+  cardSticky: {
+    position: "sticky",
+    top: "8px",
+    zIndex: 10,
+    background: "white",
+    padding: "14px",
+    borderRadius: "18px",
+    marginBottom: "18px",
+    boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
+  },
+  card: {
+    background: "white",
+    padding: "18px",
+    borderRadius: "18px",
+    marginTop: "18px",
+    boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
+  },
+  label: {
+    display: "block",
+    fontWeight: "bold",
+    fontSize: "13px",
+    marginBottom: "6px",
+    marginTop: "8px",
+  },
+  input: {
+    width: "100%",
+    padding: "11px",
+    borderRadius: "12px",
+    border: "1px solid #cbd5e1",
+    fontSize: "16px",
+    boxSizing: "border-box",
+  },
+  searchAndSendRow: {
+    display: "grid",
+    gridTemplateColumns: "1fr 112px",
+    gap: "8px",
+    alignItems: "center",
+  },
+  searchBoxCompact: { position: "relative", minWidth: 0 },
+  searchIcon: {
+    position: "absolute",
+    left: "12px",
+    top: "11px",
+    color: "#64748b",
+  },
+  searchInput: {
+    width: "100%",
+    padding: "11px 12px 11px 40px",
+    borderRadius: "12px",
+    border: "1px solid #cbd5e1",
+    fontSize: "16px",
+    boxSizing: "border-box",
+  },
   section: {
-    background: "#000",
-    color: "#fff",
-    padding: 6,
-    marginTop: 10,
+    background: "white",
+    borderRadius: "18px",
+    overflow: "hidden",
+    marginBottom: "18px",
+    boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
   },
-
+  sectionHeader: {
+    background: "#0f172a",
+    color: "white",
+    padding: "12px 16px",
+  },
+  sectionTitle: {
+    margin: 0,
+    fontSize: "18px",
+    textTransform: "uppercase",
+  },
   row: {
     display: "grid",
-    gridTemplateColumns: "minmax(110px,35vw) 1fr",
-    gap: 10,
-    padding: 8,
-    borderBottom: "1px solid #ddd",
+    gridTemplateColumns: "minmax(118px, 38vw) 1fr",
+    gap: "10px",
+    alignItems: "start",
+    padding: "10px",
+    borderTop: "1px solid #e2e8f0",
   },
-
-  left: { display: "flex", flexDirection: "column", gap: 6 },
-
+  leftColumn: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    minWidth: 0,
+  },
   imageBox: {
-    height: "clamp(100px,30vw,170px)",
-    border: "1px solid #ccc",
-    borderRadius: 8,
-  },
-
-  image: {
     width: "100%",
-    height: "100%",
-    objectFit: "contain",
-  },
-
-  qtyRow: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: 5,
-  },
-
-  qty: {
-    padding: 6,
-    textAlign: "center",
-    borderRadius: 6,
-    border: "1px solid #ccc",
-  },
-
-  name: {
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-
-  modal: {
-    position: "fixed",
-    inset: 0,
-    background: "rgba(0,0,0,0.8)",
+    height: "clamp(105px, 32vw, 180px)",
+    borderRadius: "14px",
+    background: "#ffffff",
+    border: "1px solid #cbd5e1",
+    overflow: "hidden",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    color: "#64748b",
+    fontSize: "13px",
+    fontWeight: "bold",
+    textAlign: "center",
   },
-
-  modalImg: {
-    maxWidth: "90%",
-    maxHeight: "90%",
+  productImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "contain",
+    display: "block",
+    cursor: "pointer",
+  },
+  qtyRow: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "6px",
+  },
+  qtyLabel: {
+    display: "block",
+    fontSize: "11px",
+    fontWeight: "bold",
+    marginBottom: "4px",
+    textAlign: "center",
+    color: "#475569",
+  },
+  qtyInput: {
+    width: "100%",
+    padding: "8px 3px",
+    borderRadius: "12px",
+    border: "1px solid #cbd5e1",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "16px",
+    boxSizing: "border-box",
+  },
+  productName: {
+    margin: 0,
+    fontSize: "16px",
+    fontWeight: "600",
+    lineHeight: "1.3",
+    paddingTop: "4px",
+    wordBreak: "break-word",
+    overflowWrap: "anywhere",
+    minWidth: 0,
+  },
+  textarea: {
+    width: "100%",
+    padding: "11px",
+    borderRadius: "12px",
+    border: "1px solid #cbd5e1",
+    fontSize: "16px",
+    boxSizing: "border-box",
+  },
+  summary: {
+    background: "#e2e8f0",
+    padding: "12px",
+    borderRadius: "12px",
+    margin: "14px 0",
+    fontSize: "14px",
+  },
+  primaryButton: {
+    width: "100%",
+    height: "50px",
+    border: "none",
+    borderRadius: "12px",
+    background: "#0f172a",
+    color: "white",
+    fontSize: "16px",
+    fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    marginBottom: "10px",
+  },
+  stickyWhatsappButton: {
+    width: "100%",
+    height: "44px",
+    border: "none",
+    borderRadius: "12px",
+    background: "#22c55e",
+    color: "white",
+    fontSize: "13px",
+    fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "6px",
+    whiteSpace: "nowrap",
+  },
+  secondaryButton: {
+    width: "100%",
+    height: "50px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "12px",
+    background: "white",
+    color: "#0f172a",
+    fontSize: "16px",
+    fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+  },
+  modal: {
+    position: "fixed",
+    inset: 0,
+    background: "rgba(0,0,0,0.82)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 9999,
+    padding: "18px",
+  },
+  modalContent: {
+    maxWidth: "95vw",
+    maxHeight: "95vh",
+    textAlign: "center",
+  },
+  modalImage: {
+    maxWidth: "100%",
+    maxHeight: "75vh",
+    borderRadius: "16px",
+    background: "white",
+    objectFit: "contain",
+  },
+  modalTitle: {
+    color: "white",
+    fontSize: "16px",
+    fontWeight: "bold",
+    margin: "12px 0",
+  },
+  closeButton: {
+    border: "none",
+    borderRadius: "12px",
+    background: "white",
+    color: "#0f172a",
+    fontSize: "15px",
+    fontWeight: "bold",
+    padding: "10px 18px",
   },
 };
