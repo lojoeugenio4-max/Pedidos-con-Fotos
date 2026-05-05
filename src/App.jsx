@@ -1141,6 +1141,8 @@ const hiddenProductsRaw = [
   "ZUMO D SIMON PIÑA 200 P6 (3574)",
   "ZUMO JUVER PIÑA 850ML",
 ];
+
+
 const slugifyImageName = (text) =>
   text
     .toLowerCase()
@@ -1251,16 +1253,6 @@ export default function App() {
     return visibleDepartments;
   }, [search]);
 
-  const selectedItems = useMemo(() => {
-    return products
-      .map((p) => ({
-        ...p,
-        cajas: Number(quantities[p.id]?.cajas || 0),
-        unidades: Number(quantities[p.id]?.unidades || 0),
-      }))
-      .filter((p) => p.cajas > 0 || p.unidades > 0);
-  }, [quantities]);
-
   const updateQuantity = (id, field, value) => {
     const clean = value.replace(/[^0-9]/g, "");
     setQuantities((cur) => ({
@@ -1270,15 +1262,7 @@ export default function App() {
   };
 
   const sendOrder = () => {
-    if (selectedItems.length === 0) return alert("Introduce cantidades");
-
-    const text = encodeURIComponent(
-      selectedItems
-        .map((i) => `${i.name}: ${i.cajas} cajas / ${i.unidades} unid.`)
-        .join("\n")
-    );
-
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}`, "_blank");
   };
 
   return (
@@ -1308,9 +1292,7 @@ export default function App() {
                       <img
                         src={img}
                         style={styles.productImage}
-                        onClick={() =>
-                          setSelectedImage({ src: img, name })
-                        }
+                        onClick={() => setSelectedImage(img)}
                         onError={(e) => {
                           e.target.style.display = "none";
                           e.target.parentElement.textContent = "Sin foto";
@@ -1352,7 +1334,7 @@ export default function App() {
 
       {selectedImage && (
         <div style={styles.modal} onClick={() => setSelectedImage(null)}>
-          <img src={selectedImage.src} style={styles.modalImage} />
+          <img src={selectedImage} style={styles.modalImage} />
         </div>
       )}
     </div>
@@ -1361,34 +1343,36 @@ export default function App() {
 
 const styles = {
   page: { padding: 16, fontFamily: "Arial" },
-  container: { maxWidth: 900, margin: "auto" },
+  container: { maxWidth: 1000, margin: "auto" },
   title: { fontSize: 22 },
   input: { width: "100%", padding: 10, marginBottom: 10 },
+
   section: { marginBottom: 20 },
   sectionTitle: { background: "#000", color: "#fff", padding: 10 },
 
   row: {
     display: "grid",
-    gridTemplateColumns: "160px 1fr",
-    gap: 10,
-    borderBottom: "1px solid #ddd",
+    gridTemplateColumns: "240px 1fr", // 🔥 MÁS GRANDE
+    gap: 12,
     padding: 10,
+    borderBottom: "1px solid #ddd",
   },
 
   left: { display: "flex", flexDirection: "column", gap: 8 },
 
   imageBox: {
     width: "100%",
-    height: "120px",
+    height: "180px", // 🔥 MÁS ALTO
     borderRadius: "12px",
     overflow: "hidden",
     border: "1px solid #ccc",
+    background: "#fff",
   },
 
   productImage: {
     width: "100%",
     height: "100%",
-    objectFit: "cover",
+    objectFit: "contain", // 🔥 NO DEFORMA
     cursor: "pointer",
   },
 
