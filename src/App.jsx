@@ -4,15 +4,18 @@ import { departments } from "./products";
 
 const WHATSAPP_NUMBER = "34670716744";
 
+// NORMALIZAR TEXTO
 const normalize = (text) =>
   text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+// BUSCADOR
 const matchesSearch = (product, search) => {
   const p = normalize(product);
   const words = normalize(search).split(/\s+/).filter(Boolean);
   return words.every((w) => p.includes(w));
 };
 
+// GENERAR NOMBRE DE FOTO AUTOMÁTICO
 const getImageFileName = (name) =>
   name
     .toLowerCase()
@@ -22,8 +25,10 @@ const getImageFileName = (name) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
+// RUTA IMAGEN
 const getImageUrl = (name) => `/images/${getImageFileName(name)}.jpg`;
 
+// COMPONENTE FOTO
 function ProductPhoto({ name, onClick }) {
   const [error, setError] = useState(false);
   const src = getImageUrl(name);
@@ -31,7 +36,7 @@ function ProductPhoto({ name, onClick }) {
   if (error) {
     return (
       <div style={styles.photoBox}>
-        <ImageOff size={30} />
+        <ImageOff size={28} />
         <span>Sin foto</span>
       </div>
     );
@@ -53,6 +58,7 @@ export default function App() {
   const [qty, setQty] = useState({});
   const [zoomImage, setZoomImage] = useState(null);
 
+  // FILTRO
   const filtered = useMemo(() => {
     const clean = search.trim();
 
@@ -68,6 +74,7 @@ export default function App() {
       .filter((department) => department.products.length > 0);
   }, [search]);
 
+  // ACTUALIZAR CANTIDADES
   const update = (id, field, value) => {
     const clean = value.replace(/[^0-9]/g, "");
     setQty((current) => ({
@@ -79,6 +86,7 @@ export default function App() {
     }));
   };
 
+  // ENVIAR WHATSAPP
   const send = () => {
     const lines = ["Nuevo pedido", ""];
 
@@ -110,20 +118,22 @@ export default function App() {
     <div style={styles.page}>
       <h1 style={styles.title}>Pedido online Cash Lojo</h1>
 
+      {/* BUSCADOR + WHATSAPP */}
       <div style={styles.topBar}>
         <input
           placeholder="Buscar artículo..."
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           style={styles.search}
         />
 
         <button onClick={send} style={styles.whatsappButton}>
-          <Send size={20} />
+          <Send size={18} />
           Enviar
         </button>
       </div>
 
+      {/* LISTADO */}
       {filtered.map((department) => (
         <section key={department.name} style={styles.section}>
           <h2 style={styles.sectionTitle}>{department.name}</h2>
@@ -143,8 +153,8 @@ export default function App() {
                       <input
                         placeholder="Cajas"
                         value={qty[id]?.cajas || ""}
-                        onChange={(event) =>
-                          update(id, "cajas", event.target.value)
+                        onChange={(e) =>
+                          update(id, "cajas", e.target.value)
                         }
                         style={styles.qtyInput}
                         inputMode="numeric"
@@ -153,8 +163,8 @@ export default function App() {
                       <input
                         placeholder="Unid."
                         value={qty[id]?.unidades || ""}
-                        onChange={(event) =>
-                          update(id, "unidades", event.target.value)
+                        onChange={(e) =>
+                          update(id, "unidades", e.target.value)
                         }
                         style={styles.qtyInput}
                         inputMode="numeric"
@@ -168,26 +178,23 @@ export default function App() {
         </section>
       ))}
 
+      {/* ZOOM IMAGEN */}
       {zoomImage && (
         <div style={styles.overlay} onClick={() => setZoomImage(null)}>
-          <img
-            src={zoomImage}
-            alt="Producto ampliado"
-            style={styles.zoomedImage}
-          />
+          <img src={zoomImage} style={styles.zoomedImage} />
         </div>
       )}
     </div>
   );
 }
 
+// 🎨 ESTILOS OPTIMIZADOS MÓVIL
 const styles = {
   page: {
     minHeight: "100vh",
     background: "#f1f5f9",
     padding: 8,
     fontFamily: "Arial, sans-serif",
-    boxSizing: "border-box",
   },
 
   title: {
@@ -201,35 +208,33 @@ const styles = {
     top: 0,
     zIndex: 20,
     display: "grid",
-    gridTemplateColumns: "1fr 108px",
+    gridTemplateColumns: "1fr 100px",
     gap: 6,
     background: "#f1f5f9",
-    padding: "6px 0 10px",
+    paddingBottom: 10,
   },
 
   search: {
-    width: "100%",
     height: 56,
     borderRadius: 12,
     border: "1px solid #cbd5e1",
     padding: "0 12px",
     fontSize: 18,
     fontWeight: "700",
-    boxSizing: "border-box",
   },
 
   whatsappButton: {
     height: 56,
-    border: "none",
     borderRadius: 12,
+    border: "none",
     background: "#22c55e",
     color: "white",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "900",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: 5,
+    gap: 4,
   },
 
   section: {
@@ -240,9 +245,9 @@ const styles = {
     margin: "8px 0",
     background: "#0f172a",
     color: "white",
-    padding: "10px 12px",
+    padding: 10,
     borderRadius: 12,
-    fontSize: 19,
+    fontSize: 18,
     fontWeight: "900",
   },
 
@@ -250,92 +255,75 @@ const styles = {
     background: "white",
     borderRadius: 14,
     padding: 8,
-    marginBottom: 9,
-    boxShadow: "0 1px 4px rgba(0,0,0,0.12)",
+    marginBottom: 8,
   },
 
   productRow: {
     display: "grid",
-    gridTemplateColumns: "112px 1fr",
-    gap: 10,
-    alignItems: "stretch",
+    gridTemplateColumns: "100px 1fr",
+    gap: 8,
   },
 
   productImage: {
-    width: "112px",
-    height: "112px",
+    width: 100,
+    height: 100,
     objectFit: "contain",
     borderRadius: 12,
-    background: "#f8fafc",
     border: "1px solid #cbd5e1",
-    boxSizing: "border-box",
-    display: "block",
+    background: "#f8fafc",
   },
 
   photoBox: {
-    width: "112px",
-    height: "112px",
+    width: 100,
+    height: 100,
     borderRadius: 12,
-    background: "#f8fafc",
     border: "1px dashed #cbd5e1",
-    color: "#64748b",
-    fontSize: 16,
-    fontWeight: "800",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    gap: 4,
-    boxSizing: "border-box",
+    fontSize: 14,
   },
 
   productInfo: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    minWidth: 0,
   },
 
   productName: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "900",
-    lineHeight: 1.25,
-    marginBottom: 8,
+    marginBottom: 6,
   },
 
   qtyRow: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    gap: 8,
+    gap: 6,
   },
 
   qtyInput: {
-    width: "100%",
     height: 52,
     borderRadius: 12,
     border: "1px solid #cbd5e1",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "900",
-    boxSizing: "border-box",
   },
 
   overlay: {
     position: "fixed",
     inset: 0,
     background: "rgba(0,0,0,0.9)",
-    zIndex: 9999,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: 12,
   },
 
   zoomedImage: {
-    maxWidth: "96%",
-    maxHeight: "92%",
-    objectFit: "contain",
-    background: "white",
-    borderRadius: 14,
+    maxWidth: "95%",
+    maxHeight: "90%",
+    borderRadius: 12,
   },
 };
