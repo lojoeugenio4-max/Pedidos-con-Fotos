@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ShoppingCart, Trash2, Send, Search } from "lucide-react";
 
 const WHATSAPP_NUMBER = "34670716744";
@@ -12,7 +12,7 @@ const fixedProduct = (idnum, name, offerText = "") => ({
 /* PEGA AQUÍ TU LISTADO DE DEPARTAMENTOS COMPLETO */
 const departments = [
   {
-  name: "AGUA",
+    name: "AGUA",
     products: [
       fixedProduct(1, "AGUA FUENTELAJARA 1.5L","Comprando 10 cajas REGALO 1 caja "),
       fixedProduct(2, "AGUA LANJARON 1.5L PACK 6"),
@@ -373,7 +373,7 @@ const departments = [
 
 /* PEGA AQUÍ TU LISTADO DE ARTÍCULOS OCULTOS COMPLETO */
 const hiddenProductsRaw = [
-fixedProduct(283, "1/2 LONCHA JAMON CUR.NAVIDUL 50GR"),
+ fixedProduct(283, "1/2 LONCHA JAMON CUR.NAVIDUL 50GR"),
 fixedProduct(284, "15 x 30 BOLSA TRAMPARENTE"),
 fixedProduct(285, "355ML RED BULL GRANDE"),
 fixedProduct(286, "50 CL ESTRELLA SUR LATA GRANDE"),
@@ -1163,6 +1163,7 @@ const productImagesByIdnum = Object.fromEntries(
     const idnum = Number(
       fileName.toLowerCase().replace(/\.(jpg|jpeg|png|webp)$/, "")
     );
+
     return [idnum, src];
   })
 );
@@ -1231,6 +1232,8 @@ const hiddenProductsFormatted = hiddenProductsUnique.map((product) => ({
 const products = [...visibleProducts, ...hiddenProductsFormatted];
 
 export default function App() {
+  const rowRefs = useRef({});
+
   useEffect(() => {
     let viewport = document.querySelector("meta[name=viewport]");
 
@@ -1302,6 +1305,13 @@ export default function App() {
         [field]: cleanValue,
       },
     }));
+
+    setTimeout(() => {
+      rowRefs.current[productId]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 100);
   };
 
   const closeKeyboardOnEnter = (event) => {
@@ -1372,7 +1382,7 @@ export default function App() {
           </div>
         </header>
 
-        <div style={styles.card}>
+        <div style={styles.cardSticky}>
           <label style={styles.label}>Nombre o referencia del cliente</label>
           <input
             value={customerName}
@@ -1380,9 +1390,7 @@ export default function App() {
             placeholder="Opcional"
             style={styles.input}
           />
-        </div>
 
-        <div style={styles.cardSticky}>
           <label style={styles.label}>Buscar artículo</label>
           <div style={styles.searchAndSendRow}>
             <div style={styles.searchBoxCompact}>
@@ -1412,7 +1420,13 @@ export default function App() {
               const imageSrc = productImagesByIdnum[product.idnum];
 
               return (
-                <div key={productId} style={styles.row}>
+                <div
+                  key={productId}
+                  ref={(element) => {
+                    rowRefs.current[productId] = element;
+                  }}
+                  style={styles.row}
+                >
                   <div style={styles.leftColumn}>
                     <div style={styles.imageBox}>
                       {imageSrc ? (
@@ -1456,7 +1470,11 @@ export default function App() {
                           enterKeyHint="done"
                           value={quantities[productId]?.unidades || ""}
                           onChange={(event) =>
-                            updateQuantity(productId, "unidades", event.target.value)
+                            updateQuantity(
+                              productId,
+                              "unidades",
+                              event.target.value
+                            )
                           }
                           onKeyDown={closeKeyboardOnEnter}
                           placeholder="0"
@@ -1577,7 +1595,7 @@ const styles = {
     top: "8px",
     zIndex: 10,
     background: "white",
-    padding: "10px",
+    padding: "14px",
     borderRadius: "18px",
     marginBottom: "18px",
     boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
@@ -1586,7 +1604,7 @@ const styles = {
     background: "white",
     padding: "18px",
     borderRadius: "18px",
-    marginBottom: "18px",
+    marginTop: "18px",
     boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
   },
   label: {
@@ -1652,6 +1670,7 @@ const styles = {
     alignItems: "start",
     padding: "10px",
     borderTop: "1px solid #e2e8f0",
+    scrollMarginTop: "180px",
   },
   leftColumn: {
     display: "flex",
