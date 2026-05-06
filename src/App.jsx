@@ -1295,3 +1295,15 @@ window.exportFixedProducts = () => {
       if (typeof product === "string") {
         return {
           idnum: counter++,
+          name: product,
+        };
+      }
+
+      counter++;
+      return product;
+    }),
+  }));
+
+  console.log(JSON.stringify(converted, null, 2));
+  return converted;
+};
