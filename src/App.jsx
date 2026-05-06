@@ -11,6 +11,7 @@ const fixedProduct = (idnum, name, offerText = "") => ({
 
 /* PEGA AQUÍ TU LISTADO DE DEPARTAMENTOS COMPLETO */
 const departments = [
+  {
   name: "AGUA",
     products: [
       fixedProduct(1, "AGUA FUENTELAJARA 1.5L","Comprando 10 cajas REGALO 1 caja "),
