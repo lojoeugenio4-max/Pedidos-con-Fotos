@@ -166,7 +166,6 @@ const departments = [
       fixedProduct(115, "CRUZCAMPO 750ML"),
       fixedProduct(116, "CRUZCAMPO PACK 6"),
       fixedProduct(117, "CRUZCAMPO BOTELLIN CAJA 24"),
-      fixedProduct(118, "CRUZCAMPO BOTELLIN CAJA 20"),
       fixedProduct(119, "CRUZCAMPO SIN ALCOHOL PACK"),
       fixedProduct(120, "ESTRELLA DEL SUR PACK 6"),
     ],
