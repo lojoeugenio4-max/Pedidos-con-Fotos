@@ -10,7 +10,7 @@ const fixedProduct = (idnum, name, offerText = "") => ({
 });
 
 /* PEGA AQUÍ TU LISTADO DE DEPARTAMENTOS */
-const departments = 
+const departments = [
   {
     name: "AGUA",
     products: [
@@ -374,7 +374,7 @@ const departments =
 
 /* PEGA AQUÍ TU LISTADO DE ARTÍCULOS OCULTOS */
 const hiddenProductsRaw = [
-  fixedProduct(283, "1/2 LONCHA JAMON CUR.NAVIDUL 50GR"),
+fixedProduct(283, "1/2 LONCHA JAMON CUR.NAVIDUL 50GR"),
 fixedProduct(284, "15 x 30 BOLSA TRAMPARENTE"),
 fixedProduct(285, "355ML RED BULL GRANDE"),
 fixedProduct(286, "50 CL ESTRELLA SUR LATA GRANDE"),
