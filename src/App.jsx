@@ -1648,14 +1648,16 @@ const styles = {
     fontSize: "18px",
     textTransform: "uppercase",
   },
-  row: {
-    display: "grid",
-    gridTemplateColumns: "minmax(118px, 38vw) 1fr",
-    gap: "10px",
-    alignItems: "start",
-    padding: "10px",
-    borderTop: "1px solid #e2e8f0",
-  },
+ row: {
+  display: "grid",
+  gridTemplateColumns: "minmax(118px, 38vw) 1fr",
+  gap: "10px",
+  alignItems: "start",
+  padding: "10px",
+  borderTop: "1px solid #e2e8f0",
+
+  scrollMarginTop: "220px",
+},
   leftColumn: {
     display: "flex",
     flexDirection: "column",
