@@ -1141,22 +1141,28 @@ fixedProduct(1054, "ZUMO D SIMON PIÑA 200 P6 (3574)"),
 fixedProduct(1055, "ZUMO JUVER PIÑA 850ML"),
   ];
 
-const imageModules = import.meta.glob("./assets/productos/*.{jpg,jpeg,png,webp}", {
-  eager: true,
-  query: "?url",
-  import: "default",
-});
+const imageModules = import.meta.glob(
+  "./assets/productos/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}",
+  {
+    eager: true,
+    query: "?url",
+    import: "default",
+  }
+);
 
 const productImagesByIdnum = Object.fromEntries(
   Object.entries(imageModules).map(([path, src]) => {
     const fileName = path.split("/").pop();
-    const idnum = Number(fileName.replace(/\.[^/.]+$/, ""));
+    const idnum = Number(
+      fileName.toLowerCase().replace(/\.(jpg|jpeg|png|webp)$/, "")
+    );
+
     return [idnum, src];
   })
 );
 
 const normalizeForCompare = (text) =>
-  text
+  String(text)
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -1164,7 +1170,7 @@ const normalizeForCompare = (text) =>
     .trim();
 
 const normalizeText = (text) =>
-  text
+  String(text)
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -1195,14 +1201,20 @@ const visibleProductNamesForCompare = new Set(
   visibleProducts.map((product) => normalizeForCompare(product.name))
 );
 
-const hiddenProductsUnique = [...new Set(hiddenProductsRaw)]
-  .filter((name) => !visibleProductNamesForCompare.has(normalizeForCompare(name)))
-  .sort((a, b) => a.localeCompare(b, "es"));
+const hiddenProductsUnique = Array.from(
+  new Map(
+    hiddenProductsRaw
+      .filter((product) =>
+        !visibleProductNamesForCompare.has(normalizeForCompare(product.name))
+      )
+      .map((product) => [normalizeForCompare(product.name), product])
+  ).values()
+);
 
-const hiddenProductsFormatted = hiddenProductsUnique.map((name, index) => ({
-  id: `ARTÍCULOS BUSCADOS-${name}`,
-  idnum: visibleProducts.length + index + 1,
-  name,
+const hiddenProductsFormatted = hiddenProductsUnique.map((product) => ({
+  id: `ARTÍCULOS BUSCADOS-${product.idnum}-${product.name}`,
+  idnum: product.idnum,
+  name: product.name,
   department: "ARTÍCULOS BUSCADOS",
   hidden: true,
 }));
@@ -1248,17 +1260,15 @@ export default function App() {
     if (!cleanSearch) return visibleDepartments;
 
     const hiddenMatches = hiddenProductsUnique.filter((product) =>
-      productMatchesSearch(product, cleanSearch)
-    );
+  productMatchesSearch(product.name, cleanSearch)
+);
 
-    if (hiddenMatches.length > 0) {
-      visibleDepartments.push({
-        name: "ARTÍCULOS BUSCADOS",
-        products: hiddenMatches.map((name, index) =>
-          fixedProduct(visibleProducts.length + index + 1, name)
-        ),
-      });
-    }
+if (hiddenMatches.length > 0) {
+  visibleDepartments.push({
+    name: "ARTÍCULOS BUSCADOS",
+    products: hiddenMatches,
+  });
+}
 
     return visibleDepartments;
   }, [search]);
