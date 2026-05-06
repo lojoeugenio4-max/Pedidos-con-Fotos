@@ -42,7 +42,6 @@ const departments = [
       fixedProduct(21, "NESTEA LIMON LATA 33CL"),
       fixedProduct(22, "NESTEA FRUTOS ROJOS LATA 33CL"),
       fixedProduct(23, "TONICA LATA 33CL"),
-      fixedProduct(24, "SIMON LIFE NARANJA LATA 33CL"),
       fixedProduct(25, "SIMON LIFE MANGO LATA 33CL"),
       fixedProduct(26, "TINTO VERANO LIMON CASERA LATA"),
     ],
