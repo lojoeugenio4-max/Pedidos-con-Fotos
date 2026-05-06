@@ -50,7 +50,6 @@ const departments = [
       fixedProduct(29, "COCA ZERO S/CAFEINA 2L"),
       fixedProduct(30, "FANTA NARANJA 2L"),
       fixedProduct(31, "FANTA LIMON 2L"),
-      fixedProduct(32, "SEVEN UP 2L"),
       fixedProduct(33, "REVOLTOSA COLA 2L"),
       fixedProduct(34, "REVOLTOSA NARANJA 2L"),
       fixedProduct(35, "REVOLTOSA LIMON 2L"),
@@ -87,6 +86,7 @@ const departments = [
       fixedProduct(61, "ZUMO JUVER PIÑA 850ML"),
       fixedProduct(62, "ZUMO JUVER MELOCOTON 850ML"),
       fixedProduct(63, "ZUMO JUVER NARANJA 850ML"),
+      fixedProduct(32, "SEVEN UP 2L"),
     ],
   },
   {
