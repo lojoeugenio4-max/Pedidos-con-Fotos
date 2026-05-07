@@ -10,8 +10,6 @@ const fixedProduct = (idnum, name, offerText = "") => ({
   offerText,
 });
 
-// AQUÍ DEJA TU ARRAY departments COMPLETO TAL COMO LO TIENES
-// No hace falta cambiar nada dentro de departments
 const departments = [
   {
     name: "AGUA",
@@ -578,8 +576,11 @@ export default function App() {
 
   const searchOnEnter = (event) => {
     if (event.key === "Enter") {
-      setSearch(searchInput);
+      const cleanValue = searchInput.trim();
+
+      setSearch(cleanValue);
       setSelectedDepartment("TODOS");
+
       event.currentTarget.blur();
     }
   };
@@ -694,6 +695,8 @@ export default function App() {
                   setSearchInput(event.target.value);
                 }}
                 onKeyDown={searchOnEnter}
+                inputMode="search"
+                enterKeyHint="done"
                 placeholder="Buscar artículo..."
                 style={styles.searchInput}
               />
