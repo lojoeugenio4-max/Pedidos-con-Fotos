@@ -305,27 +305,7 @@ const departments = [
       fixedProduct(185, "KETCHUP ORLANDO 265G"),
     ],
   },
-  {
-    name: "APERITIVOS",
-    products: [
-      fixedProduct(186, "PIPAS SEVILLANAS"),
-      fixedProduct(187, "REBUJINAS SEVILLANAS 120G"),
-      fixedProduct(188, "RISKETOS 120G"),
-      fixedProduct(189, "BUSCALIOS BARBACOA"),
-      fixedProduct(190, "TOSTAITOS SEVILLANOS"),
-      fixedProduct(191, "PATATAS HISPALANA 140G"),
-      fixedProduct(192, "PRINGLES CREAM ONION 70G"),
-      fixedProduct(193, "PRINGLES ORIGINAL 70G"),
-      fixedProduct(194, "PRINGLES ORIGINAL 165G"),
-      fixedProduct(195, "BOLAS MATCHBALL 105G"),
-      fixedProduct(196, "REVUELTO CARTUJANO 120G"),
-      fixedProduct(197, "PATATAS RUEDAS 100G"),
-      fixedProduct(198, "TOTAS ESTILO CASERO 100G"),
-      fixedProduct(199, "TOTAS CAMPESINA 100G"),
-      fixedProduct(200, "GOFRE CON CHOCO 110G"),
-      fixedProduct(201, "PALOMITA KETCHUP MOSTAZA 8U"),
-    ],
-  },
+
   {
     name: "LIMPIEZA",
     products: [
@@ -349,6 +329,26 @@ const departments = [
       fixedProduct(219, "TOALLITAS BEBE 120U"),
       fixedProduct(220, "ESCOBA PRIMER PRECIO"),
       fixedProduct(221, "PASTA COLGATE 75ML"),
+    ],
+  },
+  {
+    name: "CHARCUTERÍA CORTE",
+    products: [
+      fixedProduct(242, "CHOPPED TERNERA CAMPOFRIO KG"),
+      fixedProduct(243, "CHOPPED CERDO CAMPOFRIO KG"),
+      fixedProduct(244, "QUESO GOUDA BARRA KG"),
+      fixedProduct(246, "POLLO RELLENO CARLOTEÑA KG"),
+      fixedProduct(247, "POLLO RELLENO BLANCE KG"),
+      fixedProduct(248, "LOMO AL HORNO FAMADESA KG"),
+      fixedProduct(249, "MAGRETA AL AJILLO FAMADESA KG"),
+      fixedProduct(250, "JAMON COCIDO 1A CAMPOFRIO KG"),
+      fixedProduct(251, "PALETA REVILLA KG"),
+      fixedProduct(252, "PECHUGA PAVO NOEL KG"),
+      fixedProduct(253, "PECHUGA PAVOFRIO KG"),
+      fixedProduct(254, "CHORIZO EXTRA VILLAR KG"),
+      fixedProduct(255, "CHORIZO TRADICIONAL REVILLA KG"),
+      fixedProduct(256, "CHORIZO CULAR IBERICO KG"),
+      fixedProduct(257, "SALCHICHON TURON KG"),
     ],
   },
   {
@@ -377,26 +377,7 @@ const departments = [
     ],
   },
   
-  {
-    name: "CHARCUTERÍA CORTE",
-    products: [
-      fixedProduct(242, "CHOPPED TERNERA CAMPOFRIO KG"),
-      fixedProduct(243, "CHOPPED CERDO CAMPOFRIO KG"),
-      fixedProduct(244, "QUESO GOUDA BARRA KG"),
-      fixedProduct(246, "POLLO RELLENO CARLOTEÑA KG"),
-      fixedProduct(247, "POLLO RELLENO BLANCE KG"),
-      fixedProduct(248, "LOMO AL HORNO FAMADESA KG"),
-      fixedProduct(249, "MAGRETA AL AJILLO FAMADESA KG"),
-      fixedProduct(250, "JAMON COCIDO 1A CAMPOFRIO KG"),
-      fixedProduct(251, "PALETA REVILLA KG"),
-      fixedProduct(252, "PECHUGA PAVO NOEL KG"),
-      fixedProduct(253, "PECHUGA PAVOFRIO KG"),
-      fixedProduct(254, "CHORIZO EXTRA VILLAR KG"),
-      fixedProduct(255, "CHORIZO TRADICIONAL REVILLA KG"),
-      fixedProduct(256, "CHORIZO CULAR IBERICO KG"),
-      fixedProduct(257, "SALCHICHON TURON KG"),
-    ],
-  },
+  
 ];
 
 const imageModules = import.meta.glob(
