@@ -326,7 +326,7 @@ const departments = [
       fixedProduct(216, "PAPEL HIGIENICO FAMADIS 6R"),
       fixedProduct(217, "HIGIENICO ECONOMICO P12"),
       fixedProduct(218, "SECAMANO BUENO"),
-      fixedProduct(219, "TOALLITAS BEBE 120U"),
+      fixedProduct(219, "TOALLITAS BEBE BEKIDS 120U","Por 1 Caja REGALO 2 unidades"),
       fixedProduct(220, "ESCOBA PRIMER PRECIO"),
       fixedProduct(221, "PASTA COLGATE 75ML"),
     ],
