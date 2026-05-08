@@ -221,7 +221,7 @@ const departments = [
     ],
   },
   {
-    name: "LECHES Y BATIDOS",
+    name: "LECHES Y BATIDOS/CAFÉS/LÁCTEOS",
     products: [
       fixedProduct(145, "LECHE COVAP ENTERA 1L"),
       fixedProduct(146, "LECHE COVAP SEMIDESNATADA 1L"),
