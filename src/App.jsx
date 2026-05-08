@@ -24,7 +24,7 @@ const departments = [
     products: [
       fixedProduct(1, "AGUA FUENTELAJARA 1.5L", "Comprando 10 cajas REGALO 1 caja "),
       fixedProduct(2, "AGUA LANJARON 1.5L PACK 6"),
-      fixedProduct(3, "AGUA FUENTELAJARA 0.5L"),
+      fixedProduct(3, "AGUA FUENTELAJARA 0.5L", "Comprando 10 cajas REGALO 1 caja "),
       fixedProduct(4, "AGUA LANJARON 0.5L"),
       fixedProduct(5, "AGUA VALTORRE 0.5L PITORRO"),
       fixedProduct(6, "AGUA VALTORRE GARRAFA 5L"),
@@ -108,7 +108,7 @@ const departments = [
   {
     name: "ENERGÉTICAS",
     products: [
-      fixedProduct(78, "CAMALEON 250ML"),
+      fixedProduct(78, "CAMALEON 250ML"," Por 10 cajas REGALO 2 cajas"),
       fixedProduct(79, "CAMALEON GRANDE 50CL"),
       fixedProduct(80, "POWER KING 25CL"),
       fixedProduct(81, "POWER KING GRANDE 50CL"),
@@ -282,7 +282,7 @@ const departments = [
   {
     name: "ALIMENTACIÓN",
     products: [
-      fixedProduct(165, "ACEITE GIRASOL ROSIL 1L"),
+      fixedProduct(165, "ACEITE GIRASOL ROSIL 1L","Por 1 cajas REGALO 1 unidad"),
       fixedProduct(166, "ACEITE GIRASOL ROSIL 5L"),
       fixedProduct(167, "ACEITE OLIVA VIRGEN ROSIL 1L"),
       fixedProduct(168, "AZUCAR 1KG","Comprando 2 cajas REGALO 1 K"),
