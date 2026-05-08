@@ -41,7 +41,7 @@ const departments = [
       fixedProduct(103, "CERVEZA ESTRELLA SUR LATA","Por 9 cajas REGALO 1 caja"),
       fixedProduct(104, "ESTRELLA 0.0 LATA 33CL"),
       fixedProduct(105, "CRUZCAMPO S/A LATA 33CL","Comprando 2 cajas PRECIO OFERTA"),
-      fixedProduct(106, "RADLER LIMON CRUZCAMPO LATA"),
+      fixedProduct(106, "RADLER LIMON CRUZCAMPO LATA","Comprando 2 cajas PRECIO OFERTA"),
       fixedProduct(107, "HEINEKEN LATA 33CL"),
       fixedProduct(108, "CERVEZA CRUZCAMPO 50CL","Por 6 cajas REGALO 1 caja"),
       fixedProduct(109, "ESTRELLA SUR 50CL LATA GRANDE","Por 5 cajas REGALO 12 unidades"),
