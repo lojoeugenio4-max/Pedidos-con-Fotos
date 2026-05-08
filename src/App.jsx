@@ -17,8 +17,9 @@ const fixedProduct = (idnum, name, offerText = "") => ({
   offerText,
 });
 
+
 const departments = [
-  {
+ {
     name: "AGUA",
     products: [
       fixedProduct(1, "AGUA FUENTELAJARA 1.5L", "Comprando 10 cajas REGALO 1 caja "),
@@ -396,6 +397,21 @@ const productImagesByIdnum = Object.fromEntries(
   })
 );
 
+const departmentImages = Object.fromEntries(
+  departments.map((department) => {
+    const firstProductWithImage = department.products.find(
+      (product) => productImagesByIdnum[product.idnum]
+    );
+
+    return [
+      department.name,
+      firstProductWithImage
+        ? productImagesByIdnum[firstProductWithImage.idnum]
+        : null,
+    ];
+  })
+);
+
 const normalizeForCompare = (text) =>
   String(text)
     .toLowerCase()
@@ -466,14 +482,11 @@ export default function App() {
   const [quantities, setQuantities] = useState({});
   const [customerName, setCustomerName] = useState("");
   const [notes, setNotes] = useState("");
-
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
-
   const [selectedDepartment, setSelectedDepartment] = useState("TODOS");
   const [selectedImage, setSelectedImage] = useState(null);
   const [compactHeader, setCompactHeader] = useState(false);
-
   const [departmentDropdownOpen, setDepartmentDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -815,6 +828,7 @@ export default function App() {
                 <div style={styles.departmentList}>
                   {departmentOptions.map((option) => {
                     const isActive = selectedDepartment === option.name;
+                    const departmentImage = departmentImages[option.name];
 
                     return (
                       <button
@@ -826,13 +840,27 @@ export default function App() {
                           ...(isActive ? styles.departmentOptionActive : {}),
                         }}
                       >
-                        <div>
-                          <div style={styles.departmentOptionName}>
-                            {option.label}
-                          </div>
+                        <div style={styles.departmentOptionContent}>
+                          {option.name !== "TODOS" && departmentImage ? (
+                            <img
+                              src={departmentImage}
+                              alt={option.label}
+                              style={styles.departmentMiniImage}
+                            />
+                          ) : (
+                            <div style={styles.departmentMiniPlaceholder}>
+                              📋
+                            </div>
+                          )}
 
-                          <div style={styles.departmentOptionCount}>
-                            {option.count} artículos
+                          <div>
+                            <div style={styles.departmentOptionName}>
+                              {option.label}
+                            </div>
+
+                            <div style={styles.departmentOptionCount}>
+                              {option.count} artículos
+                            </div>
                           </div>
                         </div>
 
@@ -1107,6 +1135,7 @@ const styles = {
     textAlign: "left",
     boxSizing: "border-box",
     boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
+    cursor: "pointer",
   },
   departmentButtonLabel: {
     fontSize: "16px",
@@ -1138,7 +1167,7 @@ const styles = {
     boxSizing: "border-box",
   },
   departmentList: {
-    maxHeight: "290px",
+    maxHeight: "320px",
     overflowY: "auto",
     display: "grid",
     gap: "6px",
@@ -1148,17 +1177,45 @@ const styles = {
     border: "none",
     borderRadius: "12px",
     background: "white",
-    padding: "11px 12px",
+    padding: "9px 10px",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     gap: "10px",
     textAlign: "left",
     color: "#0f172a",
+    cursor: "pointer",
   },
   departmentOptionActive: {
     background: "#0f172a",
     color: "white",
+  },
+  departmentOptionContent: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    minWidth: 0,
+  },
+  departmentMiniImage: {
+    width: "46px",
+    height: "46px",
+    borderRadius: "12px",
+    objectFit: "contain",
+    background: "white",
+    border: "1px solid #cbd5e1",
+    flexShrink: 0,
+  },
+  departmentMiniPlaceholder: {
+    width: "46px",
+    height: "46px",
+    borderRadius: "12px",
+    background: "#e2e8f0",
+    border: "1px solid #cbd5e1",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "22px",
+    flexShrink: 0,
   },
   departmentOptionName: {
     fontSize: "14px",
