@@ -33,6 +33,10 @@ const departments = [
       fixedProduct(8, "AGUA SOLAN DE CABRAS S/G 5L GFA"),
       fixedProduct(9, "AGUA GOURMET CON GAS 0.5L"),
       fixedProduct(10, "AGUA GOURMET CON GAS 1.5L"),
+      fixedProduct(301, "AGUA LANJARON S/G 6 L TAPON GR"),
+      fixedProduct(302, "AGUA SOLAN DE CABRA 500 ML"),
+      fixedProduct(305, "AGUA VALTORRE TREKKING 0.75"," Por 5 cajas REGALO 2 unidades"),
+
     ],
   },
   {
@@ -218,6 +222,7 @@ const departments = [
       fixedProduct(199, "TOTAS CAMPESINA 100G"),
       fixedProduct(200, "GOFRE CON CHOCO 110G"),
       fixedProduct(201, "PALOMITA KETCHUP MOSTAZA 8U"),
+      fixedProduct(304, "AGUASAL PIPAS (SEVILLANAS)"),
     ],
   },
   {
@@ -228,7 +233,7 @@ const departments = [
       fixedProduct(147, "LECHE COVAP SIN LACTOSA ENTERA 1L"),
       fixedProduct(148, "LECHE COVAP SIN LACTOSA SEMI 1L"),
       fixedProduct(149, "LECHE PULEVA ENTERA 1L"),
-      fixedProduct(150, "LECHE PULEVA SEMI 1L"),
+      fixedProduct(150, "LECHE PULEVA A+D SEMI 1L"),
       fixedProduct(151, "BATIDO PULEVA CACAO 1L"),
       fixedProduct(152, "BATIDO PULEVA FRESA 1L"),
       fixedProduct(153, "BATIDO PULEVA VAINILLA 1L"),
@@ -307,6 +312,7 @@ const departments = [
   {
     name: "LIMPIEZA",
     products: [
+      fixedProduct(298, "AGUA FUERTE 1.5L KIRIKO"),
       fixedProduct(202, "LEJIA PINO PERFUMADA KIRIKO 2L"),
       fixedProduct(203, "LEJIA AMARILLA KIRIKO 2L"),
       fixedProduct(204, "LEJIA LAVADORA KIRIKO 2L"),
@@ -347,6 +353,7 @@ const departments = [
       fixedProduct(255, "CHORIZO TRADICIONAL REVILLA KG"),
       fixedProduct(256, "CHORIZO CULAR IBERICO KG"),
       fixedProduct(257, "SALCHICHON TURON KG"),
+      fixedProduct(429, "CHOPPED PORK LATA 2 KG FAMADESA"),
     ],
   },
   {
