@@ -232,7 +232,7 @@ fixedProduct(629, "KINDER HAPPY HIPPO BOLSA 10 U"),
 fixedProduct(630, "KIT KAT P-3"),
 fixedProduct(641, "LACA NELLY FUERTE 400 ML."),
 fixedProduct(642, "LACA NELLY SP NORMAL"),
-fixedProduct(643, "LANJARON 1/2"),
+
 
 
 fixedProduct(653, "LAUREL CAJA CARTON BARRACA 12U."),
