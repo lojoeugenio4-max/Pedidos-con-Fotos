@@ -108,6 +108,7 @@ const departments = [
       fixedProduct(47, "PEPSI COLA 1.75L"),
       fixedProduct(48, "TONICA SCHWEPPES 1L"),
       fixedProduct(49, "LIMON&NADA MINUTE MAID 1L"),
+      fixedProduct(331, "AQUAPLUS LIMON 1.5 L VALTORRE"),
     ],
   },
   {
@@ -137,6 +138,18 @@ const departments = [
       fixedProduct(99, "POWERADE ICE 50CL"),
       fixedProduct(100, "POWERADE BLOOD 50CL"),
       fixedProduct(101, "ENERYETI PIRULETA 500ML"),
+      fixedProduct(644, "LATA ENERYETI BLOOM 500ML"),
+      fixedProduct(645, "LATA ENERYETI CANDY MORA 500ML"),
+      fixedProduct(646, "LATA ENERYETI CARIBE 500CL"),
+      fixedProduct(647, "LATA ENERYETI COCO ANYEL 500ML"),
+      fixedProduct(648, "LATA ENERYETI FEROZ 500ML"),
+      fixedProduct(649, "LATA ENERYETI INFRAMUNDO 500CL"),
+      fixedProduct(650, "LATA ENERYETI ORIGINAL 500ML"),
+      fixedProduct(651, "LATA ENERYETI SANDIA SPLASH 500CL"),
+      fixedProduct(723, "MONSTERS LANDO NORRIS ZER LATA 50 CL"),
+      fixedProduct(725, "MONSTERS REHAB PEACH LATA 50 CL"),
+      fixedProduct(726, "MONSTERS RIPPER LATA 50 CL"),
+
     ],
   },
   {
@@ -201,6 +214,12 @@ const departments = [
       fixedProduct(269, "TAQUITOS NAVIDUL 50G"),
       fixedProduct(270, "BACON OSCAR MAYER LONCHA 100G"),
       fixedProduct(271, "SALCHICHAS CAMPOFRIO FRANKFURT"),
+      fixedProduct(385, "BUDIN PROLONGO 150GR"),
+      fixedProduct(720, "MINI STICK FUET CF 50G 12U"),
+      fixedProduct(739, "MOZZARELLA OGGI 150GR ROJA"),
+      fixedProduct(745, "OGGI RALLADO 4 QUESOS 150G"),
+
+      
     ],
   },
   {
@@ -223,6 +242,7 @@ const departments = [
       fixedProduct(200, "GOFRE CON CHOCO 110G"),
       fixedProduct(201, "PALOMITA KETCHUP MOSTAZA 8U"),
       fixedProduct(304, "AGUASAL PIPAS (SEVILLANAS)"),
+      fixedProduct(315, "ALTRAMUZ SALADITO BANDEJA 250GR C/10"),
     ],
   },
   {
@@ -248,6 +268,7 @@ const departments = [
       fixedProduct(162, "MARGARINA TULIPAN 225G"),
       fixedProduct(163, "MARGARINA TULIPAN 400G"),
       fixedProduct(164, "NATA COCINA RENY PICOT 200ML"),
+      fixedProduct(656, "LECHE COND LECHERA LATA 370"),
     ],
   },
   {
@@ -307,6 +328,15 @@ const departments = [
       fixedProduct(183, "ARROZ BRILLANTE 500G"),
       fixedProduct(184, "MAYONESA YBARRA 450G"),
       fixedProduct(185, "KETCHUP ORLANDO 265G"),
+      fixedProduct(588, "GUISANTES LOZANO LATA 500 GRS."),
+      fixedProduct(787, "PATE LOURIÑO LATA 840 GR."),
+      fixedProduct(816, "PISTO ORLANDO LATA 410 GR"),
+      fixedProduct(424, "CHAMPIÑON GOURMET ENTERO 185GR"),
+      fixedProduct(506, "ESPARRAGO GOURMET EXT.FCO 9/12 205G (8096)"),
+      fixedProduct(527, "FIDEOS GALLO Nº1 250 GR"),
+      fixedProduct(587, "GUISANTE LOZANO LT 185"),
+      fixedProduct(709, "MELVA CANUTERA PLAYA GIRASOL RR125"),
+
     ],
   },
   {
@@ -333,6 +363,22 @@ const departments = [
       fixedProduct(219, "TOALLITAS BEBE BEKIDS 120U", "Por 1 Caja REGALO 2 unidades"),
       fixedProduct(220, "ESCOBA PRIMER PRECIO"),
       fixedProduct(221, "PASTA COLGATE 75ML"),
+      fixedProduct(947, "SUAVIZANTE KIRIKO AZUL 2L","OFERTA"),
+      fixedProduct(948, "SUAVIZANTE SPA 2L KIRIKO","OFERTA"),
+      fixedProduct(949, "SUAVIZANTE TALCO 2L KIRIKO","OFERTA"),
+      fixedProduct(320, "AMONIACO NORMAL KIRIKO 1.5LT"),
+      fixedProduct(321, "AMONIACO PERFUMADO 1.5L KIRIKO"),
+      fixedProduct(542, "FREGASUELO COLONIA 1.500 L KIRIKO","OFERTA"),
+      fixedProduct(543, "FREGASUELOS ALOE VERA 1.5 L KIRIKO"),
+      fixedProduct(548, "FREGASUELOS FLORAL 1.5 L KIRIKO"),
+      fixedProduct(550, "FREGASUELOS KIRIKO LIMON 1,5L","OFERTA"),
+      fixedProduct(553, "FREGASUELOS TALCO 1.5L KIRIKO","OFERTA"),
+      fixedProduct(666, "LEJIA ESTRELLA AZUL 1.5 L."),
+      fixedProduct(667, "LEJIA ESTRELLA PINO 1.5 L."),
+      fixedProduct(670, "LEJIA LIMON ESTRELLA 1.5L"),
+      fixedProduct(681, "LIMPIAHOGAR BAÑOS 1.500 KIRIKO"),
+
+
     ],
   },
   {
@@ -378,7 +424,8 @@ const departments = [
       fixedProduct(238, "PAPEL ALUMINIO IND"),
       fixedProduct(239, "FILM INDUSTRIAL 200M"),
       fixedProduct(240, "PASTILLAS ENCENDIDO"),
-      fixedProduct(241, "ESTUCHES DE LOS REYES"),
+      fixedProduct(284, "15 x 30 BOLSA TRAMPARENTE"),
+      fixedProduct(379, "BOLSAS 12X25 PURUÑUELA"),
     ],
   },
 ];
