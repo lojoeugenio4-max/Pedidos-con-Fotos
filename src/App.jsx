@@ -217,7 +217,22 @@ const departments = [
       fixedProduct(447, "COÑAC SOBERANO MINI"),
       fixedProduct(575, "GINEBRA BEEFEATER MINIATURA"),
       fixedProduct(615, "JHONY WALKER NEGRO MINIATURA"),
-
+      fixedProduct(675, "LICOR 43 MINIATURA"),
+      fixedProduct(715, "MINIATURA LEGENDARIO AÑEJO"),
+      fixedProduct(716, "MINIATURA RIVES"),
+      fixedProduct(813, "P. INDIA-MINIATURA-"),
+      fixedProduct(886, "RON BACARDI C/B MINIATURA"),
+      fixedProduct(888, "RON BARCELO-MINIATURA-"),
+      fixedProduct(895, "RON NEGRITA DORADO-MINIATURA-"),
+      fixedProduct(1039, "WHISKY JACK DANIELS MINIATURA"),
+      fixedProduct(1041, "WHISKY J.B. MINIATURA"),
+      fixedProduct(288, "ABSOLUTE 200 ML ( PETACA )"),
+      fixedProduct(346, "BACARDI 200 ML ( PETACA )"),
+      fixedProduct(678, "LICOR JAGERMEISTER 200 ML 35º ( PETACA )"),
+      fixedProduct(1030, "WALKER 200 ML ( PETACA )"),
+      fixedProduct(1037, "WHISKY JACK DANIEL 200 ML ( PETACA )"),
+      fixedProduct(1040, "WHISKY J&B 200 ML ( PETACA )"),
+      fixedProduct(893, "RON NEGRITA 200 ML"),
 
       
     ],
@@ -235,6 +250,8 @@ const departments = [
       fixedProduct(280, "PIZZA POLLO KANSAS"),
       fixedProduct(281, "PIZZA POLLO MOSTAZA MIEL"),
       fixedProduct(282, "PIZZA SALSA MEXICANA"),
+      fixedProduct(817, "PIZZA ATUN-CEBOLLA S/TERIYAKI CAMPOF."),
+      
     ],
   },
   {
@@ -264,7 +281,20 @@ const departments = [
       fixedProduct(478, "CUÑA QUESO SEMI NAVIDUL 170 GR"),
       fixedProduct(846, "QUESO FRESCO 250GR LOS VAZQUEZ"),
       fixedProduct(906, "SALCHICHAS POLLO MONTEALBOR 250 G"),
-
+      fixedProduct(436, "CHORIZO REVILLA TAQUITOS 65GR"),
+      fixedProduct(347, "BACON CASA TARRADELLAS 2X100G"),
+      fixedProduct(433, "CHORIZO IBER.LONCHA 45G NAVIDUL"),
+      fixedProduct(439, "CHORIZO TUNEL PIMI.LONCHA 80GR PROLONGO"),
+      fixedProduct(850, "QUESO LONCHA CASERIO 8/U"),
+      fixedProduct(910, "SALCHICHON IBERICO LONCHAS NAVIDUL 45GRS"),
+      fixedProduct(912, "SALCHICHON TUNEL PIMI.LONCHA 80GR PROLONGO"),
+      fixedProduct(387, "CAÑA DE LOMO NAVIDUL 1.20€ L/40 GR"),
+      fixedProduct(402, "CALLOS CERDO 400GR MONTEALBOR"),
+      fixedProduct(403, "CALLOS TERNERA 400GR MONTEALBOR"),
+      fixedProduct(428, "CHOPPED PAVO L/95 GR CAMPOF."),
+      fixedProduct(430, "CHORIZO BLANCO 65 GR"),
+      fixedProduct(435, "CHORIZO PICANTE REVILLA L/65 GR"),
+      fixedProduct(467, "COMPANGO 3X100 GR"),
     ],
   },
   {
@@ -290,6 +320,14 @@ const departments = [
       fixedProduct(315, "ALTRAMUZ SALADITO BANDEJA 250GR C/10"),
       fixedProduct(786, "PATATAS TRADICIONAL 180G 1.5€"),
       fixedProduct(945, "SPIDERS 70G"),
+      fixedProduct(714, "MINI APENINAS KETCHUP 24G 0.50€"),
+      fixedProduct(717, "MINI KASKYS 40G 0.50€"),
+      fixedProduct(718, "MINI PICOTEO 30G"),
+      fixedProduct(784, "PATATAS SABOR BACON HISPALANA 140G"),
+      fixedProduct(409, "CASCALES GRANDE DOÑA PIPA 14 U"),
+      fixedProduct(473, "CORTEZAS 100 GR CARTUJANO"),
+
+      
     ],
   },
   {
@@ -413,7 +451,17 @@ const departments = [
       fixedProduct(599, "HARINA YOLANDA REBOZAR 500"),
       fixedProduct(768, "PASTA GALLO MACARR Nº6 500"),
       fixedProduct(769, "PASTA GALLO SPAGHETTI 500"),
-
+      fixedProduct(699, "MANZANILLA SOBRE LA BARRACA"),
+      fixedProduct(313, "ALCACHOFA DIAMIR 6/8 LT 390 GR"),
+      fixedProduct(364, "BICARBONATO LA BARRACA 180 GR"),
+      fixedProduct(505, "ENSALADA PIMIEN.ASAD.ALSUR L/420GR"),
+      fixedProduct(507, "ESPARRAGOS TRIGUEROS ALSUR TROC 390 GR AF"),
+      fixedProduct(510, "ESPINACAS ALSUR FRASCO 660GR"),
+      fixedProduct(519, "FABADA ASTURIANA LITORAL LT 435 GR"),
+      fixedProduct(537, "FOIE-GRAS PIARA 75 GR P3"),
+      fixedProduct(538, "FOIE-GRAS PIARA 800 GR"),
+      fixedProduct(539, "FOIGRAS APIS 200 GR"),
+      fixedProduct(540, "FOIGRAS APIS P3 80 GR NORMAL"),
 
       
     ],
@@ -466,6 +514,8 @@ const departments = [
       fixedProduct(606, "JABON DE MANOS COCINAS 500ML NAVINIA"),
       fixedProduct(607, "JABON DE MANOS DERMO 500ML NAVINIA"),
       fixedProduct(608, "JABON DE MANOS FRESA Y NATA 500ML NAVINIA"),
+      fixedProduct(486, "DESENGRASANTE AGERUL PIST 750"),
+      fixedProduct(487, "DESENGRASANTE PISTOLA 750 KIRIKO"),
 
     ],
   },
@@ -488,6 +538,7 @@ const departments = [
       fixedProduct(256, "CHORIZO CULAR IBERICO KG"),
       fixedProduct(257, "SALCHICHON TURON KG"),
       fixedProduct(429, "CHOPPED PORK LATA 2 KG FAMADESA"),
+      fixedProduct(348, "BACON PROLONGO,KG"),
     ],
   },
   {
@@ -518,6 +569,9 @@ const departments = [
       fixedProduct(318, "ALUMINIO DOMESTICO 30"),
       fixedProduct(319, "ALUMINIO DOMESTICO 8 METROS"),
       fixedProduct(365, "BOBINA P.V.C. 45X1500"),
+      fixedProduct(719, "MINI SERVI P-2 UNIDAD"),
+      fixedProduct(376, "BOLSA BLANCA 50x60 GRANDE BLANCA"),
+      fixedProduct(460, "COMIDA MIC&FR. PERRO POLLO 300GR"),
       
     ],
   },
