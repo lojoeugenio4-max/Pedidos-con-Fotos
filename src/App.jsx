@@ -478,7 +478,7 @@ fixedProduct(63, "ZUMO JUVER NARANJA 850ML"),
 fixedProduct(61, "ZUMO JUVER PIÑA 850ML"),
 fixedProduct(504, "ENJOY 1/2 L NARANJA"),
 fixedProduct(954, "SUNNY 330 CL FLORIDA P-12"),
-
+fixedProduct(1047, "BIO TROPICAL PASCUAL P6"),
 
       
     ],
