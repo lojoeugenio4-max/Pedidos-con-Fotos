@@ -404,7 +404,7 @@ fixedProduct(831, "POPITAS UNIDAD BORGES 100 MICRO"),
 fixedProduct(1044, "YOGO ICE 10UDS","Por 1 caja REGALO 2 unidades"),
 fixedProduct(1045, "ZAMBA FRUTAS SURTIDAS P10"),
 fixedProduct(445, "CHURRUCA PASARRATOS SENIOR 20UDS"),
-
+fixedProduct(604, "HUEVOS KINDER INVIERNO UNI"),
       
     ],
   },
