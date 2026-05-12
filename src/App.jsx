@@ -10,10 +10,10 @@ const fixedProduct = (id, name, note = "") => ({
 });
 
 const departments = [
-  {
+   {
     name: "NOVEDAD",
     products: [
-	fixedProduct(1056, "ATUN DORMA A.VEGETAL BOLSA 1 KG", "SUPER PRECIO hasta fin de existencia "),
+	fixedProduct(1056, "ATUN DORMA A.VEGETAL BOLSA 1 KG", "SUPER PRECIO hasta fin de existencias "),
 		
 	],
   },
@@ -823,6 +823,7 @@ const normalizeText = (text) =>
 
 const productMatchesSearch = (product, searchText) => {
   const normalizedProduct = normalizeText(product);
+
   const searchWords = normalizeText(searchText)
     .split(/[^a-z0-9ñ]+/i)
     .filter(Boolean);
@@ -864,10 +865,9 @@ export default function App() {
     const style = document.createElement("style");
 
     style.innerHTML = `
-      @keyframes blink {
-        0% { opacity: 1; }
+      @keyframes novedadBlink {
+        0%, 100% { opacity: 1; }
         50% { opacity: 0; }
-        100% { opacity: 1; }
       }
     `;
 
@@ -895,10 +895,7 @@ export default function App() {
             )
           : department.products,
       }))
-      .filter(
-        (department) =>
-          department.products.length > 0 || department.name === "NOVEDAD"
-      );
+      .filter((department) => department.products.length > 0);
   }, [search]);
 
   const selectedItems = useMemo(() => {
@@ -1026,71 +1023,64 @@ export default function App() {
         {filteredDepartments.map((department) => (
           <section key={department.name} style={styles.section}>
             <div style={styles.sectionHeader}>
-              <h2
-                style={{
-                  ...styles.sectionTitle,
-                  ...(department.name === "NOVEDAD"
-                    ? styles.novedadTitle
-                    : {}),
-                }}
-              >
-                {department.name}
+              <h2 style={styles.sectionTitle}>
+                {department.name === "NOVEDAD" ? (
+                  <span style={styles.novedadBlink}>NOVEDAD</span>
+                ) : (
+                  department.name
+                )}
               </h2>
             </div>
 
-            {department.products.length > 0 && (
-              <>
-                <div style={styles.gridHeader}>
-                  <div>Cajas</div>
-                  <div>Unid.</div>
-                  <div style={{ textAlign: "left" }}>Artículo</div>
+            <div style={styles.gridHeader}>
+              <div>Cajas</div>
+              <div>Unid.</div>
+              <div style={{ textAlign: "left" }}>Artículo</div>
+            </div>
+
+            {department.products.map((product) => {
+              const productId = `${department.name}-${product.id}`;
+
+              return (
+                <div key={productId} style={styles.row}>
+                  <input
+                    inputMode="numeric"
+                    enterKeyHint="done"
+                    value={quantities[productId]?.cajas || ""}
+                    onChange={(event) =>
+                      updateQuantity(productId, "cajas", event.target.value)
+                    }
+                    onKeyDown={closeKeyboardOnEnter}
+                    placeholder="0"
+                    style={styles.qtyInput}
+                  />
+
+                  <input
+                    inputMode="numeric"
+                    enterKeyHint="done"
+                    value={quantities[productId]?.unidades || ""}
+                    onChange={(event) =>
+                      updateQuantity(
+                        productId,
+                        "unidades",
+                        event.target.value
+                      )
+                    }
+                    onKeyDown={closeKeyboardOnEnter}
+                    placeholder="0"
+                    style={styles.qtyInput}
+                  />
+
+                  <div>
+                    <p style={styles.productName}>{product.name}</p>
+
+                    {product.note && (
+                      <p style={styles.productNote}>{product.note}</p>
+                    )}
+                  </div>
                 </div>
-
-                {department.products.map((product) => {
-                  const productId = `${department.name}-${product.id}`;
-
-                  return (
-                    <div key={productId} style={styles.row}>
-                      <input
-                        inputMode="numeric"
-                        enterKeyHint="done"
-                        value={quantities[productId]?.cajas || ""}
-                        onChange={(event) =>
-                          updateQuantity(productId, "cajas", event.target.value)
-                        }
-                        onKeyDown={closeKeyboardOnEnter}
-                        placeholder="0"
-                        style={styles.qtyInput}
-                      />
-
-                      <input
-                        inputMode="numeric"
-                        enterKeyHint="done"
-                        value={quantities[productId]?.unidades || ""}
-                        onChange={(event) =>
-                          updateQuantity(
-                            productId,
-                            "unidades",
-                            event.target.value
-                          )
-                        }
-                        onKeyDown={closeKeyboardOnEnter}
-                        placeholder="0"
-                        style={styles.qtyInput}
-                      />
-
-                      <div>
-                        <p style={styles.productName}>{product.name}</p>
-
-                        {product.note && (
-                          <p style={styles.productNote}>{product.note}</p>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </>
-            )}
+              );
+            })}
           </section>
         ))}
 
@@ -1250,12 +1240,10 @@ const styles = {
     textTransform: "uppercase",
   },
 
-  novedadTitle: {
+  novedadBlink: {
     color: "red",
     fontWeight: "bold",
-    animationName: "blink",
-    animationDuration: "1s",
-    animationIterationCount: "infinite",
+    animation: "novedadBlink 1s infinite",
   },
 
   gridHeader: {
