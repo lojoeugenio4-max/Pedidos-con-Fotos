@@ -22,7 +22,9 @@ const fixedProduct = (idnum, name, offerText = "") => ({
 const departments = [
   {
     name: "NOVEDAD",
-    products: [],
+    products: [
+		fixedProduct(1056, "ATUN DORNA A.VEGETAL BOLSA 1 K", "SUPERPRECIO( hasta fin de existencias ) "),
+	],
   },
 
   {
