@@ -21,6 +21,11 @@ const fixedProduct = (idnum, name, offerText = "") => ({
 
 const departments = [
   {
+    name: "NOVEDAD",
+    products: [],
+  },
+
+  {
     name: "AGUA",
     products: [
 fixedProduct(3, "AGUA FUENTELAJARA 0.5L", "Comprando 10 cajas REGALO 1 caja "),
@@ -945,6 +950,23 @@ export default function App() {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
 
   useEffect(() => {
+    const style = document.createElement("style");
+
+    style.innerHTML = `
+      @keyframes novedadBlink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.25; }
+      }
+    `;
+
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem(
       ORDER_STORAGE_KEY,
       JSON.stringify({
@@ -1018,7 +1040,10 @@ export default function App() {
             )
           : department.products,
       }))
-      .filter((department) => department.products.length > 0);
+      .filter(
+        (department) =>
+          department.name === "NOVEDAD" || department.products.length > 0
+      );
 
     if (!cleanSearch || selectedDepartment !== "TODOS") {
       return visibleDepartments;
@@ -1236,7 +1261,9 @@ export default function App() {
         <div ref={stickyCardRef} style={styles.cardSticky}>
           {!compactHeader && (
             <>
-              <label style={styles.label}>Nombre o referencia del cliente</label>
+              <label style={styles.label}>
+                Nombre o referencia del cliente
+              </label>
 
               <input
                 value={customerName}
@@ -1289,7 +1316,14 @@ export default function App() {
               style={styles.departmentButton}
             >
               <div>
-                <div style={styles.departmentButtonLabel}>
+                <div
+                  style={{
+                    ...styles.departmentButtonLabel,
+                    ...(selectedDepartment === "NOVEDAD"
+                      ? styles.novedadText
+                      : {}),
+                  }}
+                >
                   {selectedDepartment === "TODOS"
                     ? "Todos los departamentos"
                     : selectedDepartment}
@@ -1342,7 +1376,14 @@ export default function App() {
                           )}
 
                           <div>
-                            <div style={styles.departmentOptionName}>
+                            <div
+                              style={{
+                                ...styles.departmentOptionName,
+                                ...(option.name === "NOVEDAD"
+                                  ? styles.novedadText
+                                  : {}),
+                              }}
+                            >
                               {option.label}
                             </div>
 
@@ -1365,104 +1406,117 @@ export default function App() {
         {filteredDepartments.map((department) => (
           <section key={department.name} style={styles.section}>
             <div style={styles.sectionHeader}>
-              <h2 style={styles.sectionTitle}>{department.name}</h2>
+              <h2
+                style={{
+                  ...styles.sectionTitle,
+                  ...(department.name === "NOVEDAD"
+                    ? styles.novedadText
+                    : {}),
+                }}
+              >
+                {department.name}
+              </h2>
             </div>
 
-            {department.products.map((product) => {
-              const productId = `${department.name}-${product.idnum}-${product.name}`;
-              const imageSrc = productImagesByIdnum[product.idnum];
+            {department.products.length === 0 ? (
+              <div style={styles.emptyDepartment}>Sin artículos</div>
+            ) : (
+              department.products.map((product) => {
+                const productId = `${department.name}-${product.idnum}-${product.name}`;
+                const imageSrc = productImagesByIdnum[product.idnum];
 
-              const isSelected =
-                Number(quantities[productId]?.cajas || 0) > 0 ||
-                Number(quantities[productId]?.unidades || 0) > 0;
+                const isSelected =
+                  Number(quantities[productId]?.cajas || 0) > 0 ||
+                  Number(quantities[productId]?.unidades || 0) > 0;
 
-              return (
-                <div
-                  key={productId}
-                  ref={(element) => {
-                    rowRefs.current[productId] = element;
-                  }}
-                  style={{
-                    ...styles.row,
-                    ...(isSelected ? styles.rowSelected : {}),
-                  }}
-                >
-                  <div style={styles.leftColumn}>
-                    <div style={styles.imageBox}>
-                      {imageSrc ? (
-                        <img
-                          src={imageSrc}
-                          alt={product.name}
-                          style={styles.productImage}
-                          onClick={() =>
-                            setSelectedImage({
-                              src: imageSrc,
-                              name: product.name,
-                              idnum: product.idnum,
-                            })
-                          }
-                        />
-                      ) : (
-                        `Sin foto #${product.idnum}`
+                return (
+                  <div
+                    key={productId}
+                    ref={(element) => {
+                      rowRefs.current[productId] = element;
+                    }}
+                    style={{
+                      ...styles.row,
+                      ...(isSelected ? styles.rowSelected : {}),
+                    }}
+                  >
+                    <div style={styles.leftColumn}>
+                      <div style={styles.imageBox}>
+                        {imageSrc ? (
+                          <img
+                            src={imageSrc}
+                            alt={product.name}
+                            style={styles.productImage}
+                            onClick={() =>
+                              setSelectedImage({
+                                src: imageSrc,
+                                name: product.name,
+                                idnum: product.idnum,
+                              })
+                            }
+                          />
+                        ) : (
+                          `Sin foto #${product.idnum}`
+                        )}
+                      </div>
+
+                      <div style={styles.qtyRow}>
+                        <div>
+                          <label style={styles.qtyLabel}>Cajas</label>
+
+                          <input
+                            inputMode="numeric"
+                            enterKeyHint="done"
+                            value={quantities[productId]?.cajas || ""}
+                            onChange={(event) =>
+                              updateQuantity(
+                                productId,
+                                "cajas",
+                                event.target.value
+                              )
+                            }
+                            onKeyDown={closeKeyboardOnEnter}
+                            placeholder="0"
+                            style={styles.qtyInput}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={styles.qtyLabel}>Unid.</label>
+
+                          <input
+                            inputMode="numeric"
+                            enterKeyHint="done"
+                            value={quantities[productId]?.unidades || ""}
+                            onChange={(event) =>
+                              updateQuantity(
+                                productId,
+                                "unidades",
+                                event.target.value
+                              )
+                            }
+                            onKeyDown={closeKeyboardOnEnter}
+                            placeholder="0"
+                            style={styles.qtyInput}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p style={styles.productName}>
+                        <span style={styles.idnum}>#{product.idnum}</span>
+                        {product.name}
+                      </p>
+
+                      {product.offerText && (
+                        <div style={styles.offerText}>{product.offerText}</div>
                       )}
                     </div>
-
-                    <div style={styles.qtyRow}>
-                      <div>
-                        <label style={styles.qtyLabel}>Cajas</label>
-
-                        <input
-                          inputMode="numeric"
-                          enterKeyHint="done"
-                          value={quantities[productId]?.cajas || ""}
-                          onChange={(event) =>
-                            updateQuantity(
-                              productId,
-                              "cajas",
-                              event.target.value
-                            )
-                          }
-                          onKeyDown={closeKeyboardOnEnter}
-                          placeholder="0"
-                          style={styles.qtyInput}
-                        />
-                      </div>
-
-                      <div>
-                        <label style={styles.qtyLabel}>Unid.</label>
-
-                        <input
-                          inputMode="numeric"
-                          enterKeyHint="done"
-                          value={quantities[productId]?.unidades || ""}
-                          onChange={(event) =>
-                            updateQuantity(
-                              productId,
-                              "unidades",
-                              event.target.value
-                            )
-                          }
-                          onKeyDown={closeKeyboardOnEnter}
-                          placeholder="0"
-                          style={styles.qtyInput}
-                        />
-                      </div>
-                    </div>
                   </div>
-
-                  <div>
-                    <p style={styles.productName}>
-                      <span style={styles.idnum}>#{product.idnum}</span>
-                      {product.name}
-                    </p>
-
-                    {product.offerText && (
-                      <div style={styles.offerText}>{product.offerText}</div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </section>
         ))}
 
@@ -1805,6 +1859,12 @@ const styles = {
     fontSize: "18px",
     textTransform: "uppercase",
   },
+  emptyDepartment: {
+    padding: "20px",
+    textAlign: "center",
+    color: "#64748b",
+    fontWeight: "bold",
+  },
   row: {
     display: "grid",
     gridTemplateColumns: "minmax(118px, 38vw) 1fr",
@@ -2060,5 +2120,10 @@ const styles = {
     padding: "10px",
     marginBottom: "14px",
     fontSize: "14px",
+  },
+  novedadText: {
+    color: "#ff0000",
+    fontWeight: "900",
+    animation: "novedadBlink 0.8s infinite",
   },
 };
