@@ -60,7 +60,7 @@ fixedProduct(105, "CERVEZA CRUZCAMPO S/A LATA 33CL", "Comprando 2 cajas PRECIO O
 fixedProduct(115, "CERVEZA CRUZCAMPO 750ML"),
 fixedProduct(113, "CERVEZA ESTRELLA 0.0 1L"),
 fixedProduct(104, "CERVEZA ESTRELLA 0.0 LATA 33CL"),
-fixedProduct(112, "CERVEZA ESTRELLA 1L", "Por 25 cajas REGALO 1 caja"),
+fixedProduct(112, "CERVEZA ESTRELLA 1L"),
 fixedProduct(120, "CERVEZA ESTRELLA DEL SUR PACK 6"),
 fixedProduct(109, "CERVEZA ESTRELLA SUR 50CL LATA GRANDE", "Por 5 cajas REGALO 12 unidades"),
 fixedProduct(103, "CERVEZA ESTRELLA SUR LATA", "Por 9 cajas REGALO 1 caja"),
