@@ -30,8 +30,8 @@ const departments = [
   {
     name: "AGUA",
     products: [
-fixedProduct(3, "AGUA FUENTELAJARA 0.5L", "OFERTA:Comprando 10 cajas REGALO 1 caja "),
-fixedProduct(1, "AGUA FUENTELAJARA 1.5L", "OFERTA:Comprando 10 cajas REGALO 1 caja "),
+fixedProduct(3, "AGUA FUENTELAJARA 0.5L", "Comprando 10 cajas REGALO 1 caja "),
+fixedProduct(1, "AGUA FUENTELAJARA 1.5L", "Comprando 10 cajas REGALO 1 caja "),
 fixedProduct(9, "AGUA GOURMET CON GAS 0.5L"),
 fixedProduct(10, "AGUA GOURMET CON GAS 1.5L"),
 fixedProduct(4, "AGUA LANJARON 0.5L"),
@@ -42,7 +42,7 @@ fixedProduct(7, "AGUA SOLAN CABRAS 1.5L", "OFERTA"),
 fixedProduct(8, "AGUA SOLAN DE CABRAS S/G 5L GFA"),
 fixedProduct(5, "AGUA VALTORRE 0.5L PITORRO"),
 fixedProduct(6, "AGUA VALTORRE GARRAFA 5L"),
-fixedProduct(305, "OFERTA:AGUA VALTORRE TREKKING 0.75"," Por 5 cajas REGALO 1 caja"),
+fixedProduct(305, "AGUA VALTORRE TREKKING 0.75"," Por 5 cajas REGALO 1 caja"),
 
     ],
   },
@@ -876,9 +876,7 @@ const productMatchesSearch = (product, searchText) => {
 };
 
 const productHasOffer = (product) =>
-  normalizeText(`${product.name} ${product.offerText || ""}`)
-    .split(/[^a-z0-9ñ]+/i)
-    .includes("oferta");
+  Boolean(String(product.offerText || "").trim());
 
 const offerProducts = departments.flatMap((department) =>
   department.products
