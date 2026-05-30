@@ -13,6 +13,81 @@ import hiddenProductsRaw from "./hiddenProducts";
 const WHATSAPP_NUMBER = "34670716744";
 const ORDER_STORAGE_KEY = "cash-lojo-pedido";
 
+const LANGUAGE_STORAGE_KEY = "cash-lojo-language";
+
+const translations = {
+  es: {
+    language: "Idioma",
+    title: "Pedido online Cash Lojo",
+    subtitle: "Escribe cantidades en Unidades o Cajas, revisa el pedido y envíalo por WhatsApp.",
+    customerName: "Nombre o referencia del cliente",
+    optional: "Opcional",
+    searchProduct: "Buscar artículo",
+    searchPlaceholder: "Buscar...",
+    department: "Departamento",
+    allDepartments: "Todos los departamentos",
+    tapToChangeDepartment: "Toca para cambiar de departamento",
+    articles: "artículos",
+    noItems: "Sin artículos",
+    noPhoto: "Sin foto",
+    boxes: "Cajas",
+    boxesLower: "cajas",
+    units: "Unid.",
+    unitsLower: "unidades",
+    notes: "Observaciones",
+    summary: "Resumen",
+    itemsWithQuantity: "artículos con cantidad",
+    review: "Revisar",
+    andSend: "y Enviar",
+    reviewAndSend: "Revisar y Enviar",
+    clearOrder: "Borrar pedido",
+    orderSummary: "Resumen del pedido",
+    customer: "Cliente",
+    noItemsWithQuantity: "No hay artículos con cantidad.",
+    sendByWhatsApp: "Enviar por WhatsApp",
+    back: "↩ Volver",
+    close: "Cerrar",
+    newOrder: "Nuevo pedido",
+    sentFrom: "Enviado desde el formulario de pedidos",
+    alertEmpty: "Introduce al menos una cantidad antes de enviar el pedido.",
+  },
+  zh: {
+    language: "语言",
+    title: "Cash Lojo 在线下单",
+    subtitle: "请输入箱数或件数，确认订单后通过 WhatsApp 发送。",
+    customerName: "客户姓名或备注",
+    optional: "可选",
+    searchProduct: "搜索商品",
+    searchPlaceholder: "搜索...",
+    department: "分类",
+    allDepartments: "全部分类",
+    tapToChangeDepartment: "点击更换分类",
+    articles: "个商品",
+    noItems: "没有商品",
+    noPhoto: "无图片",
+    boxes: "箱",
+    boxesLower: "箱",
+    units: "件",
+    unitsLower: "件",
+    notes: "备注",
+    summary: "订单摘要",
+    itemsWithQuantity: "个已选商品",
+    review: "查看",
+    andSend: "并发送",
+    reviewAndSend: "查看并发送",
+    clearOrder: "清空订单",
+    orderSummary: "订单摘要",
+    customer: "客户",
+    noItemsWithQuantity: "没有已填写数量的商品。",
+    sendByWhatsApp: "通过 WhatsApp 发送",
+    back: "↩ 返回",
+    close: "关闭",
+    newOrder: "新订单",
+    sentFrom: "通过订货表单发送",
+    alertEmpty: "发送订单前请至少输入一个数量。",
+  },
+};
+
 const fixedProduct = (idnum, name, offerText = "") => ({
   idnum,
   name,
@@ -977,6 +1052,15 @@ export default function App() {
   const [compactHeader, setCompactHeader] = useState(false);
   const [departmentDropdownOpen, setDepartmentDropdownOpen] = useState(false);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
+  const [language, setLanguage] = useState(
+    () => localStorage.getItem(LANGUAGE_STORAGE_KEY) || "es"
+  );
+
+  const t = translations[language];
+
+  useEffect(() => {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+  }, [language]);
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -1041,7 +1125,7 @@ export default function App() {
     return [
       {
         name: "TODOS",
-        label: "Todos los departamentos",
+        label: t.allDepartments,
         count: visibleProducts.length,
       },
       ...catalogDepartments.map((department) => ({
@@ -1050,7 +1134,7 @@ export default function App() {
         count: department.products.length,
       })),
     ];
-  }, []);
+  }, [t.allDepartments]);
 
   const filteredDepartments = useMemo(() => {
     const cleanSearch = search.trim();
@@ -1235,33 +1319,33 @@ export default function App() {
   };
 
   const createWhatsAppMessage = () => {
-    const lines = ["Nuevo pedido", ""];
+    const lines = [t.newOrder, ""];
 
     if (customerName.trim()) {
-      lines.push(`Cliente: ${customerName.trim()}`, "");
+      lines.push(`${t.customer}: ${customerName.trim()}`, "");
     }
 
     selectedItems.forEach((item) => {
       const parts = [];
 
-      if (item.cajas > 0) parts.push(`*${item.cajas} cajas*`);
-      if (item.unidades > 0) parts.push(`*${item.unidades} unidades*`);
+      if (item.cajas > 0) parts.push(`*${item.cajas} ${t.boxesLower}*`);
+      if (item.unidades > 0) parts.push(`*${item.unidades} ${t.unitsLower}*`);
 
       lines.push(`- ${item.name}: ${parts.join(" / ")}`);
       lines.push("");
     });
 
     if (notes.trim()) {
-      lines.push(`Observaciones: ${notes.trim()}`, "");
+      lines.push(`${t.notes}: ${notes.trim()}`, "");
     }
 
-    lines.push("Enviado desde el formulario de pedidos");
+    lines.push(t.sentFrom);
     return encodeURIComponent(lines.join("\n"));
   };
 
   const sendOrder = () => {
     if (selectedItems.length === 0) {
-      alert("Introduce al menos una cantidad antes de enviar el pedido.");
+      alert(t.alertEmpty);
       return;
     }
 
@@ -1282,11 +1366,8 @@ export default function App() {
             </div>
 
             <div>
-              <h1 style={styles.title}>Pedido online Cash Lojo</h1>
-              <p style={styles.subtitle}>
-                Escribe cantidades en Unidades o Cajas, revisa el pedido y
-                envíalo por WhatsApp.
-              </p>
+              <h1 style={styles.title}>{t.title}</h1>
+              <p style={styles.subtitle}>{t.subtitle}</p>
             </div>
           </header>
         )}
@@ -1294,20 +1375,29 @@ export default function App() {
         <div ref={stickyCardRef} style={styles.cardSticky}>
           {!compactHeader && (
             <>
-              <label style={styles.label}>
-                Nombre o referencia del cliente
-              </label>
+              <label style={styles.label}>{t.language}</label>
+
+              <select
+                value={language}
+                onChange={(event) => setLanguage(event.target.value)}
+                style={styles.languageSelect}
+              >
+                <option value="es">🇪🇸 Español</option>
+                <option value="zh">🇨🇳 中文</option>
+              </select>
+
+              <label style={styles.label}>{t.customerName}</label>
 
               <input
                 value={customerName}
                 onChange={(event) => setCustomerName(event.target.value)}
-                placeholder="Opcional"
+                placeholder={t.optional}
                 style={styles.input}
               />
             </>
           )}
 
-          <label style={styles.label}>Buscar artículo</label>
+          <label style={styles.label}>{t.searchProduct}</label>
 
           <div style={styles.searchAndSendRow}>
             <div style={styles.searchBoxCompact}>
@@ -1321,7 +1411,7 @@ export default function App() {
                 onBlur={applySearch}
                 inputMode="search"
                 enterKeyHint="done"
-                placeholder="Buscar..."
+                placeholder={t.searchPlaceholder}
                 style={styles.searchInput}
               />
             </div>
@@ -1335,12 +1425,12 @@ export default function App() {
               }}
               disabled={selectedItems.length === 0}
             >
-              <span>Revisar</span>
-              <span>y Enviar</span>
+              <span>{t.review}</span>
+              <span>{t.andSend}</span>
             </button>
           </div>
 
-          <label style={styles.label}>Departamento</label>
+          <label style={styles.label}>{t.department}</label>
 
           <div ref={departmentDropdownRef} style={styles.departmentSelector}>
             <button
@@ -1358,13 +1448,11 @@ export default function App() {
                   }}
                 >
                   {selectedDepartment === "TODOS"
-                    ? "Todos los departamentos"
+                    ? t.allDepartments
                     : selectedDepartment}
                 </div>
 
-                <div style={styles.departmentButtonHint}>
-                  Toca para cambiar de departamento
-                </div>
+                <div style={styles.departmentButtonHint}>{t.tapToChangeDepartment}</div>
               </div>
 
               <ChevronDown
@@ -1421,7 +1509,7 @@ export default function App() {
                             </div>
 
                             <div style={styles.departmentOptionCount}>
-                              {option.count} artículos
+                              {option.count} {t.articles}
                             </div>
                           </div>
                         </div>
@@ -1452,7 +1540,7 @@ export default function App() {
             </div>
 
             {department.products.length === 0 ? (
-              <div style={styles.emptyDepartment}>Sin artículos</div>
+              <div style={styles.emptyDepartment}>{t.noItems}</div>
             ) : (
               department.products.map((product) => {
                 const productId =
@@ -1491,13 +1579,13 @@ export default function App() {
                             }
                           />
                         ) : (
-                          `Sin foto #${product.idnum}`
+                          `${t.noPhoto} #${product.idnum}`
                         )}
                       </div>
 
                       <div style={styles.qtyRow}>
                         <div>
-                          <label style={styles.qtyLabel}>Cajas</label>
+                          <label style={styles.qtyLabel}>{t.boxes}</label>
 
                           <input
                             inputMode="numeric"
@@ -1517,7 +1605,7 @@ export default function App() {
                         </div>
 
                         <div>
-                          <label style={styles.qtyLabel}>Unid.</label>
+                          <label style={styles.qtyLabel}>{t.units}</label>
 
                           <input
                             inputMode="numeric"
@@ -1556,19 +1644,18 @@ export default function App() {
         ))}
 
         <div style={styles.card}>
-          <label style={styles.label}>Observaciones</label>
+          <label style={styles.label}>{t.notes}</label>
 
           <textarea
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
-            placeholder="Opcional"
+            placeholder={t.optional}
             rows={3}
             style={styles.textarea}
           />
 
           <div style={styles.summary}>
-            <strong>Resumen:</strong> {selectedItems.length} artículos con
-            cantidad.
+            <strong>{t.summary}:</strong> {selectedItems.length} {t.itemsWithQuantity}.
           </div>
 
           <button
@@ -1579,11 +1666,11 @@ export default function App() {
             }}
             disabled={selectedItems.length === 0}
           >
-            <ShoppingCart size={20} /> Revisar y Enviar
+            <ShoppingCart size={20} /> {t.reviewAndSend}
           </button>
 
           <button onClick={clearOrder} style={styles.secondaryButton}>
-            <Trash2 size={20} /> Borrar pedido
+            <Trash2 size={20} /> {t.clearOrder}
           </button>
         </div>
       </div>
@@ -1594,16 +1681,16 @@ export default function App() {
             style={styles.orderModalContent}
             onClick={(event) => event.stopPropagation()}
           >
-            <h2 style={styles.orderModalTitle}>Resumen del pedido</h2>
+            <h2 style={styles.orderModalTitle}>{t.orderSummary}</h2>
 
             {customerName.trim() && (
               <p style={styles.orderCustomer}>
-                Cliente: <strong>{customerName.trim()}</strong>
+                {t.customer}: <strong>{customerName.trim()}</strong>
               </p>
             )}
 
             {selectedItems.length === 0 ? (
-              <p>No hay artículos con cantidad.</p>
+              <p>{t.noItemsWithQuantity}</p>
             ) : (
               <div style={styles.orderItemsList}>
                 {selectedItems.map((item) => (
@@ -1613,9 +1700,9 @@ export default function App() {
                     </div>
 
                     <div style={styles.orderItemQty}>
-                      {item.cajas > 0 && <span>{item.cajas} cajas</span>}
+                      {item.cajas > 0 && <span>{item.cajas} {t.boxesLower}</span>}
                       {item.unidades > 0 && (
-                        <span>{item.unidades} unidades</span>
+                        <span>{item.unidades} {t.unitsLower}</span>
                       )}
                     </div>
                   </div>
@@ -1625,21 +1712,21 @@ export default function App() {
 
             {notes.trim() && (
               <div style={styles.orderNotes}>
-                <strong>Observaciones:</strong>
+                <strong>{t.notes}:</strong>
                 <br />
                 {notes.trim()}
               </div>
             )}
 
             <button onClick={sendOrder} style={styles.whatsappButton}>
-              <Send size={20} /> Enviar por WhatsApp
+              <Send size={20} /> {t.sendByWhatsApp}
             </button>
 
             <button
               onClick={() => setShowOrderSummary(false)}
               style={styles.secondaryButton}
             >
-              <ArrowLeft size={18} /> ↩ Volver
+              <ArrowLeft size={18} /> {t.back}
             </button>
           </div>
         </div>
@@ -1663,7 +1750,7 @@ export default function App() {
               onClick={() => setSelectedImage(null)}
               style={styles.closeButton}
             >
-              Cerrar
+              {t.close}
             </button>
           </div>
         </div>
@@ -1742,6 +1829,17 @@ const styles = {
     border: "1px solid #cbd5e1",
     fontSize: "16px",
     boxSizing: "border-box",
+  },
+  languageSelect: {
+    width: "100%",
+    padding: "11px",
+    borderRadius: "12px",
+    border: "1px solid #cbd5e1",
+    fontSize: "16px",
+    fontWeight: "bold",
+    background: "white",
+    boxSizing: "border-box",
+    marginBottom: "8px",
   },
   searchAndSendRow: {
     display: "grid",
