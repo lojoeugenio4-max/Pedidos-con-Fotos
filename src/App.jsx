@@ -954,22 +954,22 @@ const productHasOffer = (product) =>
   Boolean(String(product.offerText || "").trim());
 
 const translateOfferText = (offerText, language) => {
-  const text = String(offerText || "").trim();
+  const originalText = String(offerText || "");
 
-  if (!text || language !== "zh") {
-    return offerText;
+  if (!originalText.trim() || language !== "zh") {
+    return originalText;
   }
 
-  let translated = text
-    .replace(/SUPERPRECIO/gi, "超值优惠")
+  return originalText
+    .replace(/SUPERPRECIO/gi, "超值特价")
     .replace(/PRECIO OFERTA/gi, "优惠价")
     .replace(/OFERTA/gi, "特价")
-    .replace(/REGALO/gi, "赠送")
     .replace(/hasta fin de existencias/gi, "售完即止")
     .replace(/Comprando/gi, "购买")
     .replace(/\bPor\b/gi, "购买")
-    .replace(/cajas?/gi, "箱")
-    .replace(/Caja\b/gi, "箱")
+    .replace(/REGALO/gi, "赠送")
+    .replace(/cajas/gi, "箱")
+    .replace(/caja/gi, "箱")
     .replace(/unidades/gi, "件")
     .replace(/unidad/gi, "件")
     .replace(/botellas/gi, "瓶")
@@ -977,20 +977,14 @@ const translateOfferText = (offerText, language) => {
     .replace(/paquetes/gi, "包")
     .replace(/paquete/gi, "包")
     .replace(/bolsas/gi, "袋")
+    .replace(/bolsa/gi, "袋")
     .replace(/docena/gi, "打")
-    .replace(/sale a/gi, "价格为");
-
-  translated = translated
-    .replace(/(\d+)\s*箱\s*赠送\s*(\d+)/gi, "$1箱赠送$2")
-    .replace(/(\d+)\s*件\s*赠送\s*(\d+)/gi, "$1件赠送$2")
-    .replace(/(\d+)\s*瓶\s*赠送\s*(\d+)/gi, "$1瓶赠送$2")
-    .replace(/(\d+)\s*包\s*赠送\s*(\d+)/gi, "$1包赠送$2")
+    .replace(/sale a/gi, "价格为")
+    .replace(/hasta/gi, "至")
+    .replace(/fin de existencias/gi, "售完为止")
     .replace(/\s+/g, " ")
     .trim();
-
-  return translated;
 };
-
 
 const offerProducts = departments.flatMap((department) =>
   department.products
