@@ -904,6 +904,36 @@ fixedProduct(1024, "VIVO PERRO POLLO LT 830"),
   },
 ];
 
+
+const departmentTranslations = {
+  zh: {
+    TODOS: "全部分类",
+    OFERTAS: "优惠",
+    NOVEDAD: "新品",
+    AGUA: "水",
+    CERVEZAS: "啤酒",
+    "REFRESCOS LATAS": "罐装饮料",
+    "REFRESCOS 2L / 1.5L": "大瓶饮料 2L / 1.5L",
+    ENERGÉTICAS: "能量饮料",
+    "VINOS Y LICORES": "葡萄酒和烈酒",
+    PIZZAS: "披萨",
+    "CHARCUTERÍA LONCHEADA": "切片熟食",
+    APERITIVOS: "零食小吃",
+    "LECHES Y BATIDOS/CAFÉS/LÁCTEOS": "牛奶/奶昔/咖啡/乳制品",
+    ZUMOS: "果汁",
+    ALIMENTACIÓN: "食品",
+    DROGUERIA: "清洁日用品",
+    "CHARCUTERÍA CORTE": "熟食切块",
+    VARIOS: "其他",
+    "ARTÍCULOS BUSCADOS": "搜索到的商品",
+  },
+};
+
+const getDepartmentLabel = (departmentName, language) =>
+  language === "zh"
+    ? departmentTranslations.zh[departmentName] || departmentName
+    : departmentName;
+
 const imageModules = import.meta.glob(
   "./assets/productos/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}",
   {
@@ -1131,11 +1161,11 @@ export default function App() {
       },
       ...catalogDepartments.map((department) => ({
         name: department.name,
-        label: department.name,
+        label: getDepartmentLabel(department.name, language),
         count: department.products.length,
       })),
     ];
-  }, [t.allDepartments]);
+  }, [t.allDepartments, language]);
 
   const filteredDepartments = useMemo(() => {
     const cleanSearch = search.trim();
@@ -1449,7 +1479,7 @@ export default function App() {
                 >
                   {selectedDepartment === "TODOS"
                     ? t.allDepartments
-                    : selectedDepartment}
+                    : getDepartmentLabel(selectedDepartment, language)}
                 </div>
 
                 <div style={styles.departmentButtonHint}>{t.tapToChangeDepartment}</div>
@@ -1535,7 +1565,7 @@ export default function App() {
                     : {}),
                 }}
               >
-                {department.name}
+                {getDepartmentLabel(department.name, language)}
               </h2>
             </div>
 
