@@ -88,6 +88,45 @@ const translations = {
   },
 };
 
+
+const offerTextTranslations = {
+  zh: {
+    "SUPERPRECIO( hasta fin de existencias )": "超值优惠（售完即止）",
+    "Comprando 10 cajas REGALO 1 caja": "购买10箱赠送1箱",
+    "OFERTA": "特价",
+    "Por 5 cajas REGALO 1 caja": "购买5箱赠送1箱",
+    "Comprando 10 cajas PRECIO OFERTA": "购买10箱享受优惠价",
+    "Por 6 cajas REGALO 1 caja": "购买6箱赠送1箱",
+    "Comprando 5 cajas PRECIO OFERTA": "购买5箱享受优惠价",
+    "Por 7 cajas REGALO 1 caja": "购买7箱赠送1箱",
+    "Comprando 2 cajas PRECIO OFERTA": "购买2箱享受优惠价",
+    "Por 5 cajas REGALO 12 unidades": "购买5箱赠送12件",
+    "Por 10 cajas REGALO 2 cajas": "购买10箱赠送2箱",
+    "Por 12 botellas REGALO 1 botella": "购买12瓶赠送1瓶",
+    "Comprando 6 unidades PRECIO OFERTA": "购买6件享受优惠价",
+    "Comprando 12 unidades PRECIO OFERTA": "购买12件享受优惠价",
+    "Por 1 caja REGALO 1 paquete": "购买1箱赠送1包",
+    "Por 1 caja REGALO 2 unidades": "购买1箱赠送2件",
+    "Por 5 Cajas REGALO 3 unidades": "购买5箱赠送3件",
+    "Por 1 caja REGALO 1 unidad KUYX 330ML FRUTOS ROJOS": "购买1箱赠送1件 KUYX 330ML 红果味",
+    "Por 2 cajas REGALO 1 unidad KUYX PIÑA COCO 3L": "购买2箱赠送1件 KUYX 菠萝椰子 3L",
+    "Por 1 cajas REGALO 1 unidad": "购买1箱赠送1件",
+    "Por 4 unidades REGALO 1 unidad": "购买4件赠送1件",
+    "Comprando 2 cajas REGALO 1 K": "购买2箱赠送1公斤",
+    "Por 2 cajas REGALO 2 bolsas Patatas Congeladas 1kg": "购买2箱赠送2袋1公斤冷冻薯条",
+    "2,85 € docena. Comprando 1 caja sale a 2,71 €": "每打2,85€。购买1箱每打2,71€",
+    "Por 1 Caja REGALO 2 unidades": "购买1箱赠送2件",
+    "Comprando 1 Caja PRECIO OFERTA": "购买1箱享受优惠价",
+  },
+};
+
+const translateOfferText = (text, language) => {
+  if (language !== "zh" || !text) return text;
+
+  const normalizedText = String(text).trim().replace(/\s+/g, " ");
+  return offerTextTranslations.zh[normalizedText] || text;
+};
+
 const fixedProduct = (idnum, name, offerText = "") => ({
   idnum,
   name,
@@ -953,39 +992,6 @@ const productMatchesSearch = (product, searchText) => {
 const productHasOffer = (product) =>
   Boolean(String(product.offerText || "").trim());
 
-const translateOfferText = (offerText, language) => {
-  const originalText = String(offerText || "");
-
-  if (!originalText.trim() || language !== "zh") {
-    return originalText;
-  }
-
-  return originalText
-    .replace(/SUPERPRECIO/gi, "超值特价")
-    .replace(/PRECIO OFERTA/gi, "优惠价")
-    .replace(/OFERTA/gi, "特价")
-    .replace(/hasta fin de existencias/gi, "售完即止")
-    .replace(/Comprando/gi, "购买")
-    .replace(/\bPor\b/gi, "购买")
-    .replace(/REGALO/gi, "赠送")
-    .replace(/cajas/gi, "箱")
-    .replace(/caja/gi, "箱")
-    .replace(/unidades/gi, "件")
-    .replace(/unidad/gi, "件")
-    .replace(/botellas/gi, "瓶")
-    .replace(/botella/gi, "瓶")
-    .replace(/paquetes/gi, "包")
-    .replace(/paquete/gi, "包")
-    .replace(/bolsas/gi, "袋")
-    .replace(/bolsa/gi, "袋")
-    .replace(/docena/gi, "打")
-    .replace(/sale a/gi, "价格为")
-    .replace(/hasta/gi, "至")
-    .replace(/fin de existencias/gi, "售完为止")
-    .replace(/\s+/g, " ")
-    .trim();
-};
-
 const offerProducts = departments.flatMap((department) =>
   department.products
     .filter(productHasOffer)
@@ -1666,9 +1672,7 @@ export default function App() {
                       </p>
 
                       {product.offerText && (
-                        <div style={styles.offerText}>
-                          {translateOfferText(product.offerText, language)}
-                        </div>
+                        <div style={styles.offerText}>{translateOfferText(product.offerText, language)}</div>
                       )}
                     </div>
                   </div>
