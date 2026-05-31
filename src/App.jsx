@@ -9,6 +9,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import hiddenProductsRaw from "./hiddenProducts";
+import logoLojo from "./assets/logo-lojo.jpg";
 
 const WHATSAPP_NUMBER = "34670716744";
 const ORDER_STORAGE_KEY = "cash-lojo-pedido";
@@ -86,45 +87,6 @@ const translations = {
     sentFrom: "通过订货表单发送",
     alertEmpty: "发送订单前请至少输入一个数量。",
   },
-};
-
-
-const offerTextTranslations = {
-  zh: {
-    "SUPERPRECIO( hasta fin de existencias )": "超值优惠（售完即止）",
-    "Comprando 10 cajas REGALO 1 caja": "购买10箱赠送1箱",
-    "OFERTA": "特价",
-    "Por 5 cajas REGALO 1 caja": "购买5箱赠送1箱",
-    "Comprando 10 cajas PRECIO OFERTA": "购买10箱享受优惠价",
-    "Por 6 cajas REGALO 1 caja": "购买6箱赠送1箱",
-    "Comprando 5 cajas PRECIO OFERTA": "购买5箱享受优惠价",
-    "Por 7 cajas REGALO 1 caja": "购买7箱赠送1箱",
-    "Comprando 2 cajas PRECIO OFERTA": "购买2箱享受优惠价",
-    "Por 5 cajas REGALO 12 unidades": "购买5箱赠送12件",
-    "Por 10 cajas REGALO 2 cajas": "购买10箱赠送2箱",
-    "Por 12 botellas REGALO 1 botella": "购买12瓶赠送1瓶",
-    "Comprando 6 unidades PRECIO OFERTA": "购买6件享受优惠价",
-    "Comprando 12 unidades PRECIO OFERTA": "购买12件享受优惠价",
-    "Por 1 caja REGALO 1 paquete": "购买1箱赠送1包",
-    "Por 1 caja REGALO 2 unidades": "购买1箱赠送2件",
-    "Por 5 Cajas REGALO 3 unidades": "购买5箱赠送3件",
-    "Por 1 caja REGALO 1 unidad KUYX 330ML FRUTOS ROJOS": "购买1箱赠送1件 KUYX 330ML 红果味",
-    "Por 2 cajas REGALO 1 unidad KUYX PIÑA COCO 3L": "购买2箱赠送1件 KUYX 菠萝椰子 3L",
-    "Por 1 cajas REGALO 1 unidad": "购买1箱赠送1件",
-    "Por 4 unidades REGALO 1 unidad": "购买4件赠送1件",
-    "Comprando 2 cajas REGALO 1 K": "购买2箱赠送1公斤",
-    "Por 2 cajas REGALO 2 bolsas Patatas Congeladas 1kg": "购买2箱赠送2袋1公斤冷冻薯条",
-    "2,85 € docena. Comprando 1 caja sale a 2,71 €": "每打2,85€。购买1箱每打2,71€",
-    "Por 1 Caja REGALO 2 unidades": "购买1箱赠送2件",
-    "Comprando 1 Caja PRECIO OFERTA": "购买1箱享受优惠价",
-  },
-};
-
-const translateOfferText = (text, language) => {
-  if (language !== "zh" || !text) return text;
-
-  const normalizedText = String(text).trim().replace(/\s+/g, " ");
-  return offerTextTranslations.zh[normalizedText] || text;
 };
 
 const fixedProduct = (idnum, name, offerText = "") => ({
@@ -1400,13 +1362,12 @@ export default function App() {
       <div style={styles.container}>
         {!compactHeader && (
           <header style={styles.header}>
-            <div style={styles.iconBox}>
-              <ShoppingCart size={28} />
-            </div>
+            <img src={logoLojo} alt="Cash Lojo" style={styles.logo} />
 
-            <div>
-              <h1 style={styles.title}>{t.title}</h1>
-              <p style={styles.subtitle}>{t.subtitle}</p>
+            <div style={styles.brandText}>
+              <h1 style={styles.title}>Cash Lojo</h1>
+              <p style={styles.subtitle}>{t.title}</p>
+              <p style={styles.headerNote}>{t.subtitle}</p>
             </div>
           </header>
         )}
@@ -1672,7 +1633,7 @@ export default function App() {
                       </p>
 
                       {product.offerText && (
-                        <div style={styles.offerText}>{translateOfferText(product.offerText, language)}</div>
+                        <div style={styles.offerText}>{product.offerText}</div>
                       )}
                     </div>
                   </div>
@@ -1803,7 +1764,7 @@ const styles = {
     minHeight: "100vh",
     background: "#f1f5f9",
     padding: "10px",
-    color: "#0f172a",
+    color: "#0B1F5F",
     fontFamily: "Arial, sans-serif",
     boxSizing: "border-box",
   },
@@ -1812,30 +1773,49 @@ const styles = {
     margin: "0 auto",
   },
   header: {
-    background: "white",
+    background: "linear-gradient(135deg, #0D2B8C 0%, #071B5C 100%)",
     padding: "16px",
-    borderRadius: "18px",
+    borderRadius: "20px",
     display: "flex",
     gap: "14px",
     alignItems: "center",
     marginBottom: "16px",
-    boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
+    boxShadow: "0 10px 24px rgba(13,43,140,0.26)",
+    color: "#ffffff",
   },
-  iconBox: {
-    background: "#0f172a",
-    color: "white",
-    borderRadius: "16px",
-    padding: "12px",
-    display: "flex",
+  logo: {
+    width: "76px",
+    height: "76px",
+    objectFit: "contain",
+    background: "#ffffff",
+    borderRadius: "14px",
+    padding: "5px",
+    boxSizing: "border-box",
+    flexShrink: 0,
+  },
+  brandText: {
+    minWidth: 0,
   },
   title: {
     margin: 0,
-    fontSize: "22px",
+    fontSize: "30px",
+    lineHeight: 1,
+    fontWeight: "900",
+    color: "#E30613",
+    letterSpacing: "-0.6px",
+    textTransform: "uppercase",
   },
   subtitle: {
     margin: "6px 0 0",
-    color: "#475569",
-    fontSize: "14px",
+    color: "#ffffff",
+    fontSize: "15px",
+    fontWeight: "800",
+  },
+  headerNote: {
+    margin: "4px 0 0",
+    color: "rgba(255,255,255,0.88)",
+    fontSize: "12px",
+    lineHeight: 1.25,
   },
   cardSticky: {
     position: "sticky",
@@ -1926,7 +1906,7 @@ const styles = {
   departmentButtonLabel: {
     fontSize: "16px",
     fontWeight: "800",
-    color: "#0f172a",
+    color: "#0B1F5F",
   },
   departmentButtonHint: {
     marginTop: "2px",
@@ -1969,11 +1949,11 @@ const styles = {
     justifyContent: "space-between",
     gap: "10px",
     textAlign: "left",
-    color: "#0f172a",
+    color: "#0B1F5F",
     cursor: "pointer",
   },
   departmentOptionActive: {
-    background: "#0f172a",
+    background: "#0D2B8C",
     color: "white",
   },
   departmentOptionContent: {
@@ -2022,7 +2002,7 @@ const styles = {
     boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
   },
   sectionHeader: {
-    background: "#0f172a",
+    background: "#0D2B8C",
     color: "white",
     padding: "12px 16px",
   },
@@ -2148,7 +2128,7 @@ const styles = {
     height: "50px",
     border: "none",
     borderRadius: "12px",
-    background: "#0f172a",
+    background: "#E30613",
     color: "white",
     fontSize: "16px",
     fontWeight: "bold",
@@ -2163,7 +2143,7 @@ const styles = {
     height: "52px",
     border: "none",
     borderRadius: "12px",
-    background: "#0f172a",
+    background: "linear-gradient(135deg, #0D2B8C 0%, #071B5C 100%)",
     color: "white",
     fontSize: "12px",
     fontWeight: "bold",
@@ -2181,7 +2161,7 @@ const styles = {
     height: "50px",
     border: "none",
     borderRadius: "12px",
-    background: "#22c55e",
+    background: "#E30613",
     color: "white",
     fontSize: "16px",
     fontWeight: "bold",
@@ -2197,7 +2177,7 @@ const styles = {
     border: "1px solid #cbd5e1",
     borderRadius: "12px",
     background: "white",
-    color: "#0f172a",
+    color: "#0B1F5F",
     fontSize: "16px",
     fontWeight: "bold",
     display: "flex",
@@ -2237,7 +2217,7 @@ const styles = {
     border: "none",
     borderRadius: "12px",
     background: "white",
-    color: "#0f172a",
+    color: "#0B1F5F",
     fontSize: "15px",
     fontWeight: "bold",
     padding: "10px 18px",
