@@ -1081,7 +1081,7 @@ export default function App() {
   const [notes, setNotes] = useState(() => getSavedOrder().notes || "");
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("TODOS");
+  const [selectedDepartment, setSelectedDepartment] = useState("OFERTAS");
   const [selectedImage, setSelectedImage] = useState(null);
   const [compactHeader, setCompactHeader] = useState(false);
   const [departmentDropdownOpen, setDepartmentDropdownOpen] = useState(false);
